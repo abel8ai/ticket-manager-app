@@ -12,6 +12,9 @@ interface UserDao {
     @Query("Select * from user where id = :id")
     suspend fun getUserById(id:Int):UserEntitiy
 
+    @Query("Select * from user where username = :username")
+    suspend fun getUserByUsername(username:String):UserEntitiy
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(user : UserEntitiy):Int
 }
