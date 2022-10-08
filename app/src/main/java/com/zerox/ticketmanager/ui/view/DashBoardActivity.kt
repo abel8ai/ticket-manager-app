@@ -1,5 +1,6 @@
 package com.zerox.ticketmanager.ui.view
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.EditText
@@ -55,7 +56,9 @@ class DashBoardActivity : AppCompatActivity() {
 
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
-            showAddTicketDialog()
+            val intent = Intent(this,WorkTicketActivity::class.java)
+            startActivity(intent)
+            //showAddTicketDialog()
         }
 
         // observer to receive tickets data when ready

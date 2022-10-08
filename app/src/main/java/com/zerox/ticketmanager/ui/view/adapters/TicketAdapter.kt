@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
-import com.zerox.ticketmanager.ui.view.adapters.TicketViewHolder
 
 class TicketAdapter(private val tickets: List<TicketEntity>):RecyclerView.Adapter<TicketViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketViewHolder {
