@@ -4,4 +4,9 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="mandatory_field">Mandatory field</string>
+    <string name="view_ticket">view ticket</string>
+    <string name="client_preview">Robert Perez</string>
+    <string name="button_add">Add</string>
+    <string name="button_calendar">Calendar</string>
+    <string name="button_directions">Directions</string>
 </resources>
