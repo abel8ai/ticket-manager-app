@@ -45,8 +45,10 @@ class WorkTicketActivity : AppCompatActivity() {
                     tab.text = getText(R.string.purchasing)
                 3->
                     tab.text = getText(R.string.finishing_up)
-                4->
+                4->{
                     tab.setIcon(R.drawable.ic_camera_24)
+                }
+
             }
         }.attach()
     }

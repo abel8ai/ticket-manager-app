@@ -15,6 +15,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabTextColor="@color/grey_60"
+        app:tabSelectedTextColor="@color/primary"
+        app:tabIconTint="@color/color_selector"
+        app:tabIndicatorColor="@color/selected_color"
         app:tabMode="fixed"
         app:tabInlineLabel="true"/>
 

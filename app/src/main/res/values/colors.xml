@@ -10,8 +10,12 @@
     <color name="back">#F2F2F2</color>
     <color name="grey_90">#263238</color>
     <color name="grey_60">#666666</color>
-    <color name="grey_20">#AEAEAE</color>
+    <color name="grey_20">#C8C8C8</color>
     <color name="blue_dark">#0085CA</color>
     <color name="divider">#9A9A9A</color>
     <color name="primary">#3DCB01</color>
+
+    <color name="selected_color">#3DCB01</color>
+    <color name="unselected_color">#666666</color>
+
 </resources>
