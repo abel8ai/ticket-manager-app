@@ -19,6 +19,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.view.WorkTicketActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".ui.view.DashBoardActivity"

@@ -42,6 +42,7 @@ class DashBoardActivity : AppCompatActivity() {
         // observers to receive tickets data when ready
         dashboardViewModel.ticketsModel.observe(this) {
             ticketList = it
+            // initialize recyclerview with all the tickets
             initRecyclerView()
         }
         dashboardViewModel.ticketModel.observe(this) {

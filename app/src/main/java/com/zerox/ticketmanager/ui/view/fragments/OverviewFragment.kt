@@ -19,6 +19,7 @@ class OverviewFragment : Fragment() {
 
     //viewModel Injection
     private val workTicketViewModel by viewModels<WorkTicketViewModel> ()
+    // viewBinding
     private var _binding: FragmentOverviewBinding? = null
     private val binding get() = _binding!!
     private var ticketId = -1
@@ -36,6 +37,7 @@ class OverviewFragment : Fragment() {
         // observer to receive the ticket once is tha data is available
         workTicketViewModel.ticketModel.observe(requireActivity()){
 
+            // set values in de UI textviews
             val ticket = resources.getString(R.string.ticket_no) + it.id.toString()
             binding.ticketNumber.text = ticket
             binding.tvClientName.text = it.clientName
@@ -43,10 +45,14 @@ class OverviewFragment : Fragment() {
             binding.tvAddress.text = it.address
             binding.tvDate.text = it.date
         }
+        // retrieve ticket from database
         CoroutineScope(Dispatchers.IO).launch {
             workTicketViewModel.getTicketById(ticketId)
         }
-
+        // listener to go to directions
+        binding.btnDirections.setOnClickListener {
+            //startActivity()
+        }
         return binding.root
 
     }
