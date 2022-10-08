@@ -24,17 +24,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/client_preview"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_view_ticket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8sp"
-            android:textColor="@color/black"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/view_ticket" />
+            android:text="@string/view_ticket" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

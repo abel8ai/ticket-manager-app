@@ -34,6 +34,9 @@ class DashBoardActivity : AppCompatActivity() {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // configure the support action bar's title
+        supportActionBar!!.title = resources.getString(R.string.dashboard_title)
+
         // initialization for the menu elements
         ViewAnimation.init(binding.fabWorkTicket)
         ViewAnimation.init(binding.fabGetDirections)
@@ -73,7 +76,7 @@ class DashBoardActivity : AppCompatActivity() {
         dialogBinding.etDate.setOnClickListener {
             showDatePicker(dialogBinding.etDate)
         }
-        // building the dialog
+        // building the Alert Dialog
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
         builder.setView(dialogBinding.root)
@@ -85,7 +88,7 @@ class DashBoardActivity : AppCompatActivity() {
         }
         dialogBinding.btAdicionar.setOnClickListener {
 
-
+            // getting the values from the dialog's viewBinding
             val mClientName = dialogBinding.etClientName.text.toString()
             val mAddress = dialogBinding.etAddress.text.toString()
             val mDate = dialogBinding.etDate.text.toString()
@@ -106,6 +109,7 @@ class DashBoardActivity : AppCompatActivity() {
                     dialogBinding.etDate.setHintTextColor(Color.RED)
                 }
             } else {
+                // create ticket and store it in database
                 val ticket = TicketEntity(null, mClientName, mAddress, mDate)
                 CoroutineScope(Dispatchers.IO).launch {
                     dashboardViewModel.addTicket(ticket)

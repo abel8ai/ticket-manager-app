@@ -14,4 +14,5 @@
     <string name="address">Address</string>
     <string name="date">Date</string>
     <string name="dialog_add_ticket_title">Add Ticket</string>
+    <string name="dashboard_title">Dashboard</string>
 </resources>
