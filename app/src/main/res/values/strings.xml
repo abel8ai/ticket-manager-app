@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Ticket Manager</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="mandatory_field">Mandatory field</string>
 </resources>

@@ -4,6 +4,7 @@
     package="com.zerox.ticketmanager">
 
     <application
+        android:name=".TicketManagerApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +15,15 @@
         android:theme="@style/Theme.TicketManager"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.view.DashBoardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
