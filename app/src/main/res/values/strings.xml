@@ -17,4 +17,13 @@
     <string name="dashboard_title">Dashboard</string>
     <string name="work_ticket_title">Work Ticket</string>
     <string name="phone_number">Phone Number</string>
+
+
+    <string name="overview">Overview</string>
+    <string name="finishing_up">Finishing Up</string>
+    <string name="purchasing">Purchasing</string>
+    <string name="pic_logo">Picture Logo</string>
+    <string name="work_details">Work Details</string>
+
+
 </resources>
