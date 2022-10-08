@@ -3,6 +3,7 @@ package com.zerox.ticketmanager.di
 import android.app.Application
 import androidx.room.Room
 import com.zerox.ticketmanager.data.model.database.TicketManagerDatabase
+import com.zerox.ticketmanager.data.model.database.dao.TicketDao
 import com.zerox.ticketmanager.data.model.database.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,10 @@ object DatabaseModule {
     @Singleton
     fun provideUserDao(database: TicketManagerDatabase):UserDao{
         return database.getUserDao()
+    }
+    @Provides
+    @Singleton
+    fun provideTicketDao(database: TicketManagerDatabase):TicketDao{
+        return database.getTicketDao()
     }
 }

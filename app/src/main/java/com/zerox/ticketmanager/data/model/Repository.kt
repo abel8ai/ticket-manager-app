@@ -1,11 +1,16 @@
 package com.zerox.ticketmanager.data.model
 
+import com.zerox.ticketmanager.data.model.database.dao.TicketDao
 import com.zerox.ticketmanager.data.model.database.dao.UserDao
+import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
 import com.zerox.ticketmanager.data.model.exceptions.UserNotFoundException
 import javax.inject.Inject
 
-class Repository @Inject constructor(private val userDao: UserDao) {
+class Repository @Inject constructor(
+    private val userDao: UserDao,
+    private val ticketDao: TicketDao
+) {
 
     suspend fun getUserById(id: Int): UserEntitiy {
         return userDao.getUserById(id)
@@ -17,7 +22,15 @@ class Repository @Inject constructor(private val userDao: UserDao) {
             ?: throw UserNotFoundException("There is no user with the provided username")
     }
 
-    suspend fun addUser(user:UserEntitiy):Long{
+    suspend fun addUser(user: UserEntitiy): Long {
         return userDao.insertUser(user)
+    }
+
+    suspend fun addTicket(ticket: TicketEntity):Long{
+        return ticketDao.insertTicket(ticket)
+    }
+
+    suspend fun getAllTickets():MutableList<TicketEntity>{
+        return ticketDao.getAllTickets()
     }
 }
