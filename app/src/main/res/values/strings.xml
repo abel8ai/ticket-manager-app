@@ -16,4 +16,5 @@
     <string name="dialog_add_ticket_title">Add Ticket</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="work_ticket_title">Work Ticket</string>
+    <string name="phone_number">Phone Number</string>
 </resources>

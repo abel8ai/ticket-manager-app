@@ -39,6 +39,17 @@ class DashBoardActivity : AppCompatActivity() {
         // configure the support action bar's title
         supportActionBar!!.title = resources.getString(R.string.dashboard_title)
 
+        // observers to receive tickets data when ready
+        dashboardViewModel.ticketsModel.observe(this) {
+            ticketList = it
+            initRecyclerView()
+        }
+        dashboardViewModel.ticketModel.observe(this) {
+            val intent = Intent(this@DashBoardActivity,WorkTicketActivity::class.java)
+            intent.putExtra("ticket_id",it.id)
+            startActivity(intent)
+        }
+
         // initialization for the menu elements
         ViewAnimation.init(binding.fabWorkTicket)
         ViewAnimation.init(binding.fabGetDirections)
@@ -55,15 +66,16 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
+        // on click listener for work ticket menu element
+        binding.fabWorkTicket.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                dashboardViewModel.getLastTicketCreated()
+            }
+        }
+
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
             showAddTicketDialog()
-        }
-
-        // observer to receive tickets data when ready
-        dashboardViewModel.ticketModel.observe(this) {
-            ticketList = it
-            initRecyclerView()
         }
 
         // load tickets information from database
@@ -94,6 +106,7 @@ class DashBoardActivity : AppCompatActivity() {
             val mClientName = dialogBinding.etClientName.text.toString()
             val mAddress = dialogBinding.etAddress.text.toString()
             val mDate = dialogBinding.etDate.text.toString()
+            val phone = dialogBinding.etPhone.text.toString()
 
             // fields validation
             if (mClientName.isEmpty() || mAddress.isEmpty() || mDate.isEmpty()) {
@@ -112,7 +125,7 @@ class DashBoardActivity : AppCompatActivity() {
                 }
             } else {
                 // create ticket and store it in database
-                val ticket = TicketEntity(null, mClientName, mAddress, mDate)
+                val ticket = TicketEntity(null, mClientName,phone,               mAddress, mDate)
                 CoroutineScope(Dispatchers.IO).launch {
                     dashboardViewModel.addTicket(ticket)
                 }

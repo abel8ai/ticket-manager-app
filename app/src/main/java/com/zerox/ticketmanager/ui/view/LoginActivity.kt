@@ -36,6 +36,9 @@ class LoginActivity : AppCompatActivity() {
             intent.putExtra("user_id",user.id)
             startActivity(intent)
         }
+        CoroutineScope(Dispatchers.IO).launch {
+            loginViewModel.addDummyUser()
+        }
 
         // onClick listener for the Login Button
         binding.btnLogin.setOnClickListener {

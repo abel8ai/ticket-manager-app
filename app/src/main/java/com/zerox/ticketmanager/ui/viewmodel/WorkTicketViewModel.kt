@@ -18,8 +18,4 @@ class WorkTicketViewModel @Inject constructor(
     suspend fun getTicketById(id:Int){
         _ticketModel.postValue(repository.getTicketById(id))
     }
-
-    suspend fun getLastTicketCreated(){
-        _ticketModel.postValue(repository.getLastTicketCreated())
-    }
 }

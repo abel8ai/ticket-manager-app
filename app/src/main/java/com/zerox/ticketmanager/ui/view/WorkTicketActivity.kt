@@ -21,6 +21,8 @@ class WorkTicketActivity : AppCompatActivity() {
         // configure the support action bar's title and back button
         supportActionBar!!.title = resources.getString(R.string.work_ticket_title)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        val id = intent.extras!!.get("ticket_id")
+        binding.tv.text = id.toString()
 
     }
 
