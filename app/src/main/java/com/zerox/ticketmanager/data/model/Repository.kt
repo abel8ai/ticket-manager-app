@@ -2,6 +2,7 @@ package com.zerox.ticketmanager.data.model
 
 import com.zerox.ticketmanager.data.model.database.dao.TicketDao
 import com.zerox.ticketmanager.data.model.database.dao.UserDao
+import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
 import com.zerox.ticketmanager.data.model.exceptions.UserNotFoundException
 import javax.inject.Inject
@@ -24,5 +25,12 @@ class Repository @Inject constructor(
     suspend fun addUser(user: UserEntitiy): Long {
         return userDao.insertUser(user)
     }
-    
+
+    suspend fun addTicket(ticket: TicketEntity):Long{
+        return ticketDao.insertTicket(ticket)
+    }
+
+    suspend fun getAllTickets():MutableList<TicketEntity>{
+        return ticketDao.getAllTickets()
+    }
 }
