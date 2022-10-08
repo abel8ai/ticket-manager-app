@@ -21,12 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.sql.Date
-import java.util.*
+
 
 @AndroidEntryPoint
 class DashBoardActivity : AppCompatActivity() {
+    // viewBinding
     private lateinit var binding: ActivityDashboardBinding
+    // inject the dashboard viewmodel into the activity
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var ticketList = emptyList<TicketEntity>()
     private var isRotated = false
