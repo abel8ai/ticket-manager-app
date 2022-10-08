@@ -7,18 +7,14 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val userDao: UserDao) {
 
-    suspend fun getUserById(id:Int):UserEntitiy{
-        val user = userDao.getUserById(id)
-        if (user == null)
-            throw UserNotFoundException("There is no user with the provided id")
-        return user
+    suspend fun getUserById(id: Int): UserEntitiy {
+        return userDao.getUserById(id)
+            ?: throw UserNotFoundException("There is no user with the provided id")
     }
 
-    suspend fun getUserByUsername(username:String):UserEntitiy{
-        val user = userDao.getUserByUsername(username)
-        if (user == null)
-            throw UserNotFoundException("There is no user with the provided username")
-        return user
+    suspend fun getUserByUsername(username: String): UserEntitiy {
+        return userDao.getUserByUsername(username)
+            ?: throw UserNotFoundException("There is no user with the provided username")
     }
 
     suspend fun addUser(user:UserEntitiy):Long{

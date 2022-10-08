@@ -1,4 +1,4 @@
 package com.zerox.ticketmanager.data.model.exceptions
 
-class UserNotFoundException(cause:String) : Exception(cause) {
+class UserNotFoundException(message:String) : Exception(message) {
 }

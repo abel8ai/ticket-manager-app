@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zerox.ticketmanager.data.model.Repository
 import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
+import com.zerox.ticketmanager.data.model.exceptions.EncryptionErrorException
 import com.zerox.ticketmanager.data.model.exceptions.IncorrectPasswordException
 import com.zerox.ticketmanager.ui.utils.AESEncyption
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +24,17 @@ class LoginViewModel @Inject constructor(
 
     suspend fun doLogin(username: String, password: String) {
         val user = repository.getUserByUsername(username)
+        // encrypt password to compare with encrypted password saved in database
         val encryptedPassword = AESEncyption.encrypt(password)
+            ?: throw EncryptionErrorException("There was an error while encrypting")
         if (user.password != encryptedPassword)
             throw IncorrectPasswordException("Incorrect password")
         _userModel.postValue(user)
+    }
+
+    suspend fun addDummyUser(){
+        val pass = AESEncyption.encrypt("123")
+            ?: throw EncryptionErrorException("There was an error while encrypting")
+        repository.addUser(UserEntitiy(null,"peter",pass!!))
     }
 }
