@@ -21,7 +21,7 @@ class Repository @Inject constructor(private val userDao: UserDao) {
         return user
     }
 
-    suspend fun addUser(user:UserEntitiy):Int{
+    suspend fun addUser(user:UserEntitiy):Long{
         return userDao.insertUser(user)
     }
 }

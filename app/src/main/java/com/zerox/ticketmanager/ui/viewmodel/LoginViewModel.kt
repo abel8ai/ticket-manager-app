@@ -13,4 +13,9 @@ class LoginViewModel @Inject constructor(
     suspend fun getUserByUsername(username: String) {
         repository.getUserByUsername(username)
     }
+
+    suspend fun doLogin(username: String,password:String){
+        val user = repository.getUserByUsername(username)
+
+    }
 }
