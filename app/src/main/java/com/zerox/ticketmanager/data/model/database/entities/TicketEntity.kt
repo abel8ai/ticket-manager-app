@@ -11,6 +11,7 @@ data class TicketEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo val id : Int?,
     @ColumnInfo val clientName:String,
+    @ColumnInfo val phoneNumber:String,
     @ColumnInfo val address: String,
     @ColumnInfo val date: String
 )
