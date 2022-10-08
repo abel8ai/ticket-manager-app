@@ -57,9 +57,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
-            val intent = Intent(this,WorkTicketActivity::class.java)
-            startActivity(intent)
-            //showAddTicketDialog()
+            showAddTicketDialog()
         }
 
         // observer to receive tickets data when ready

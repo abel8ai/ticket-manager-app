@@ -13,6 +13,9 @@ interface TicketDao {
     @Query("Select * from ticket where id = :id")
     suspend fun getTicketById(id:Int):TicketEntity?
 
+    @Query("Select * from ticket order by id desc limit 1")
+    suspend fun getLastTicketCreated():TicketEntity?
+
     @Query("Select * from ticket")
     suspend fun getAllTickets():MutableList<TicketEntity>
 
