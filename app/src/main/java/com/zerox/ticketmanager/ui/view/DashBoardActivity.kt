@@ -1,5 +1,6 @@
 package com.zerox.ticketmanager.ui.view
 
+import android.location.Address
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
@@ -7,7 +8,7 @@ import com.zerox.ticketmanager.ui.utils.ViewAnimation
 
 class DashBoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardBinding
-    private var isRotate = false
+    private var isRotated = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
@@ -19,15 +20,14 @@ class DashBoardActivity : AppCompatActivity() {
 
         //on click to display menu elements with animation
         binding.fabMenu.setOnClickListener {
-            isRotate = ViewAnimation.rotateFab(it, !isRotate)
-            if(isRotate){
+            isRotated = ViewAnimation.rotateFab(it, !isRotated)
+            if (isRotated) {
                 ViewAnimation.showIn(binding.fabWorkTicket)
                 ViewAnimation.showIn(binding.fabGetDirections)
-            }else{
+            } else {
                 ViewAnimation.showOut(binding.fabWorkTicket)
                 ViewAnimation.showOut(binding.fabGetDirections)
             }
         }
-
     }
 }
