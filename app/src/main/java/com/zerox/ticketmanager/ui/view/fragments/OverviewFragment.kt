@@ -10,6 +10,9 @@ import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.databinding.FragmentOverviewBinding
 import com.zerox.ticketmanager.ui.viewmodel.WorkTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OverviewFragment : Fragment() {
@@ -29,6 +32,20 @@ class OverviewFragment : Fragment() {
 
         // obtain the ticket id from the activity
         ticketId = requireArguments().getInt("ticket_id")
+
+        // observer to receive the ticket once is tha data is available
+        workTicketViewModel.ticketModel.observe(requireActivity()){
+
+            val ticket = resources.getString(R.string.ticket_no) + it.id.toString()
+            binding.ticketNumber.text = ticket
+            binding.tvClientName.text = it.clientName
+            binding.tvPhone.text = it.phoneNumber
+            binding.tvAddress.text = it.address
+            binding.tvDate.text = it.date
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            workTicketViewModel.getTicketById(ticketId)
+        }
 
         return binding.root
 

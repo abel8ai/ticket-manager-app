@@ -24,6 +24,7 @@
     <string name="purchasing">Purchasing</string>
     <string name="pic_logo">Picture Logo</string>
     <string name="work_details">Work Details</string>
+    <string name="ticket_no">Ticket # </string>
 
 
 </resources>

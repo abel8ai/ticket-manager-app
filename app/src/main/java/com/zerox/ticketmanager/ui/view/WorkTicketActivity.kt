@@ -10,7 +10,9 @@ import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.databinding.ActivityWorkTicketBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.view.adapters.ViewPagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WorkTicketActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityWorkTicketBinding
