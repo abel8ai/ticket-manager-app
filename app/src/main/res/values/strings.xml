@@ -9,4 +9,9 @@
     <string name="button_add">Add</string>
     <string name="button_calendar">Calendar</string>
     <string name="button_directions">Directions</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="client_name">Client Name</string>
+    <string name="address">Address</string>
+    <string name="date">Date</string>
+    <string name="dialog_add_ticket_title">Add Ticket</string>
 </resources>
