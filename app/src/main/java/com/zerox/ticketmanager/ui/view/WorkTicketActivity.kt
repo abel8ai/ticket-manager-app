@@ -14,7 +14,8 @@ import com.zerox.ticketmanager.ui.view.adapters.ViewPagerAdapter
 class WorkTicketActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityWorkTicketBinding
-
+    // variable to get ticket id from extras
+    private var ticketId = -1;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkTicketBinding.inflate(layoutInflater)
@@ -23,13 +24,13 @@ class WorkTicketActivity : AppCompatActivity() {
         // configure the support action bar's title and back button
         supportActionBar!!.title = resources.getString(R.string.work_ticket_title)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val id = intent.extras!!.get("ticket_id")
+        ticketId = intent.extras!!.getInt("ticket_id")
         initTab()
 
     }
 
     private fun initTab(){
-        val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+        val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle,ticketId)
         binding.vpSections.adapter = adapter
 
         TabLayoutMediator(binding.tlSections,binding.vpSections){tab,position->
@@ -43,7 +44,7 @@ class WorkTicketActivity : AppCompatActivity() {
                 3->
                     tab.text = getText(R.string.finishing_up)
                 4->
-                    tab.text = getText(R.string.pic_logo)
+                    tab.setIcon(R.drawable.ic_camera_24)
             }
         }.attach()
     }
@@ -68,7 +69,12 @@ class WorkTicketActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        startActivity(Intent(this,DashBoardActivity::class.java))
         return super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        onSupportNavigateUp()
+        super.onBackPressed()
     }
 }

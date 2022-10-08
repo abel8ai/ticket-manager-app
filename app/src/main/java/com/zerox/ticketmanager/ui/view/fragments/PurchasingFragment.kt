@@ -5,9 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zerox.ticketmanager.R
-import com.zerox.ticketmanager.databinding.FragmentOverviewBinding
-import com.zerox.ticketmanager.databinding.FragmentPictureLogoBinding
 import com.zerox.ticketmanager.databinding.FragmentPurchasingBinding
 
 class PurchasingFragment : Fragment() {

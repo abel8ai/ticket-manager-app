@@ -154,4 +154,8 @@ class DashBoardActivity : AppCompatActivity() {
             }
         newFragment.show(supportFragmentManager, "datePicker")
     }
+
+    override fun onBackPressed() {
+
+    }
 }
