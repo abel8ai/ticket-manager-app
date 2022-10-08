@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.view.DirectionsActivity">
 
+    <fragment
+        android:id="@+id/frag_map"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.view.MapsActivity" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
