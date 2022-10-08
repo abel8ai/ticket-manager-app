@@ -15,6 +15,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
+
+    // livedata to notify the activity when the data is ready
     private val _userModel = MutableLiveData<UserEntitiy>()
     val userModel: LiveData<UserEntitiy> get() = _userModel
 
@@ -25,16 +27,21 @@ class LoginViewModel @Inject constructor(
     suspend fun doLogin(username: String, password: String) {
         val user = repository.getUserByUsername(username)
         // encrypt password to compare with encrypted password saved in database
+        // added exception management in the rare case the encryption process fails
         val encryptedPassword = AESEncyption.encrypt(password)
             ?: throw EncryptionErrorException("There was an error while encrypting")
+
         if (user.password != encryptedPassword)
             throw IncorrectPasswordException("Incorrect password")
         _userModel.postValue(user)
     }
 
     suspend fun addDummyUser(){
+        // encrypt password to save into database
+        // added exception management in the rare case the encryption process fails
         val pass = AESEncyption.encrypt("123")
             ?: throw EncryptionErrorException("There was an error while encrypting")
-        repository.addUser(UserEntitiy(null,"peter",pass!!))
+
+        repository.addUser(UserEntitiy(null,"peter",pass))
     }
 }
