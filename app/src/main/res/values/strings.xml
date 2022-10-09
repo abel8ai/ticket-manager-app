@@ -25,6 +25,7 @@
     <string name="pic_logo">Picture Logo</string>
     <string name="work_details">Work Details</string>
     <string name="ticket_no">Ticket # </string>
+    <string name="directionsApiKey">AIzaSyCq7DlaPzoUCR4pSyDw7SrCyPFnEEYOl3A</string>
 
 
 </resources>

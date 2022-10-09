@@ -4,9 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -17,17 +17,31 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.maps.DirectionsApi
+import com.google.maps.GeoApiContext
+import com.google.maps.android.PolyUtil
+import com.google.maps.model.DirectionsResult
+import com.google.maps.model.TravelMode
 import com.zerox.ticketmanager.BuildConfig
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.databinding.ActivityDirectionsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.joda.time.DateTime
+import java.util.concurrent.TimeUnit
 
-class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
 
+class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    // viewBinding
     private lateinit var binding: ActivityDirectionsBinding
 
-
+    // google maps variables
     private var lastKnownLocation: Location? = null
     private val defaultLocation = LatLng(-33.8523341, 151.2106085)
     private var locationPermissionGranted = false
@@ -36,10 +50,16 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
     private var map: GoogleMap? = null
     private var cameraPosition: CameraPosition? = null
 
+    // variable to retrieve direction from extras
+    private var direction: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDirectionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // retrieve direction if it comes from work ticket screen
+        direction = intent.extras?.getString("direction")
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -54,9 +74,11 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.frag_map) as SupportMapFragment?
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.frag_map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         map?.let { map ->
             outState.putParcelable(KEY_CAMERA_POSITION, map.cameraPosition)
@@ -64,6 +86,7 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
         }
         super.onSaveInstanceState(outState)
     }
+
     override fun onMapReady(map: GoogleMap) {
         this.map = map
         // Prompt the user for permission.
@@ -76,19 +99,25 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
         getDeviceLocation()
         // setUserLocation
     }
+
     private fun getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(this.applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
             locationPermissionGranted = true
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+            )
         }
     }
 
@@ -108,15 +137,23 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
                         if (lastKnownLocation != null) {
                             map?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
-                                LatLng(lastKnownLocation!!.latitude,
-                                    lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
+                                    LatLng(
+                                        lastKnownLocation!!.latitude,
+                                        lastKnownLocation!!.longitude
+                                    ), DEFAULT_ZOOM.toFloat()
+                                )
+                            )
+                            if (direction!=null)
+                                CoroutineScope(Dispatchers.IO).launch { getRoute() }
+
                         }
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
                         Log.e(TAG, "Exception: %s", task.exception)
                         map?.moveCamera(
                             CameraUpdateFactory
-                            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
+                                .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat())
+                        )
                         map?.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
@@ -125,16 +162,20 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
             Log.e("Exception: %s", e.message, e)
         }
     }
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         locationPermissionGranted = false
         when (requestCode) {
             PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
 
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
                     locationPermissionGranted = true
                 }
             }
@@ -142,6 +183,7 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
         }
         updateLocationUI()
     }
+
     /**
      * Updates the map's UI setti+ngs based on whether the user has granted location permission.
      */
@@ -163,6 +205,53 @@ class DirectionsActivity : AppCompatActivity(),OnMapReadyCallback {
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
         }
+    }
+    private fun getGeoContext(): GeoApiContext? {
+        val geoApiContext = GeoApiContext()
+        return geoApiContext.setQueryRateLimit(3)
+            .setApiKey(getString(R.string.directionsApiKey))
+            .setConnectTimeout(1, TimeUnit.SECONDS)
+            .setReadTimeout(1, TimeUnit.SECONDS)
+            .setWriteTimeout(1, TimeUnit.SECONDS)
+    }
+    private fun getRoute(){
+        val now = DateTime()
+        val lat = lastKnownLocation!!.latitude.toString()
+        val long = lastKnownLocation!!.longitude.toString()
+        val result: DirectionsResult =
+            DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin("$lat$long")
+                .destination(direction)
+                .departureTime(now).await()
+        addMarkersToMap(result,map!!)
+    }
+    private fun addMarkersToMap(results: DirectionsResult, mMap: GoogleMap) {
+        mMap.addMarker(
+            MarkerOptions().position(
+                LatLng(
+                    results.routes[0].legs[0].startLocation.lat,
+                    results.routes[0].legs[0].startLocation.lng
+                )
+            ).title(
+                results.routes[0].legs[0].startAddress
+            )
+        )
+        mMap.addMarker(
+            MarkerOptions().position(
+                LatLng(
+                    results.routes[0].legs[0].endLocation.lat,
+                    results.routes[0].legs[0].endLocation.lng
+                )
+            ).title(
+                results.routes[0].legs[0].startAddress
+            )
+        )
+        addPolyline(results,mMap)
+    }
+    private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
+        val decodedPath: List<LatLng> = PolyUtil.decode(
+            results.routes[0].overviewPolyline.encodedPath
+        )
+        mMap.addPolyline(PolylineOptions().addAll(decodedPath))
     }
     companion object {
         private val TAG = DirectionsActivity::class.java.simpleName

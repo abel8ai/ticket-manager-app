@@ -1,5 +1,6 @@
 package com.zerox.ticketmanager.ui.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.zerox.ticketmanager.R
+import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.FragmentOverviewBinding
+import com.zerox.ticketmanager.ui.view.DirectionsActivity
 import com.zerox.ticketmanager.ui.viewmodel.WorkTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -18,25 +21,27 @@ import kotlinx.coroutines.launch
 class OverviewFragment : Fragment() {
 
     //viewModel Injection
-    private val workTicketViewModel by viewModels<WorkTicketViewModel> ()
+    private val workTicketViewModel by viewModels<WorkTicketViewModel>()
+
     // viewBinding
     private var _binding: FragmentOverviewBinding? = null
     private val binding get() = _binding!!
     private var ticketId = -1
+    private lateinit var ticket: TicketEntity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentOverviewBinding.inflate(inflater,container,false)
+        _binding = FragmentOverviewBinding.inflate(inflater, container, false)
 
         // obtain the ticket id from the activity
         ticketId = requireArguments().getInt("ticket_id")
 
         // observer to receive the ticket once is tha data is available
-        workTicketViewModel.ticketModel.observe(requireActivity()){
-
+        workTicketViewModel.ticketModel.observe(requireActivity()) {
+            ticket = it
             // set values in de UI textviews
             val ticket = resources.getString(R.string.ticket_no) + it.id.toString()
             binding.ticketNumber.text = ticket
@@ -51,7 +56,9 @@ class OverviewFragment : Fragment() {
         }
         // listener to go to directions
         binding.btnDirections.setOnClickListener {
-            //startActivity()
+            val intent = Intent(requireContext(), DirectionsActivity::class.java)
+            intent.putExtra("direction", ticket.address)
+            startActivity(intent)
         }
         return binding.root
 
