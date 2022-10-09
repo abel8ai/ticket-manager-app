@@ -33,6 +33,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
+import java.io.FileInputStream
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -209,7 +211,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getGeoContext(): GeoApiContext? {
         val geoApiContext = GeoApiContext()
         return geoApiContext.setQueryRateLimit(3)
-            .setApiKey(getString(R.string.directionsApiKey))
+            .setApiKey(BuildConfig.MAPS_API_KEY)
             .setConnectTimeout(1, TimeUnit.SECONDS)
             .setReadTimeout(1, TimeUnit.SECONDS)
             .setWriteTimeout(1, TimeUnit.SECONDS)
