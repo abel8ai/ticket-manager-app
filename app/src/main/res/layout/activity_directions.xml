@@ -6,4 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".ui.view.DirectionsActivity">
 
+    <fragment
+        android:id="@+id/frag_map"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.view.MapsActivity"/>
+
+    <com.tistory.zladnrms.roundablelayout.RoundableLayout
+        android:id="@+id/roundableLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:elevation="0dp"
+        app:backgroundColor="@color/primary"
+        app:cornerLeftSide="0dp"
+        app:cornerRightSide="10dp"
+        app:dashLineGap="0dp"
+        app:dashLineWidth="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:strokeLineWidth="0dp">
+
+        <LinearLayout
+            android:id="@+id/lyPedidos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnUserProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnUserProfile">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_directions_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/sv_direction"
+                    android:layout_width="400dp"
+                    app:iconifiedByDefault="false"
+                    style="@style/MySearchViewStyle"
+                    app:queryHint="@string/enter_destination"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </com.tistory.zladnrms.roundablelayout.RoundableLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
