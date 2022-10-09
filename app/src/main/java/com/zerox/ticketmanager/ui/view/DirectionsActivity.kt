@@ -33,8 +33,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
-import java.io.FileInputStream
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -53,7 +51,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var cameraPosition: CameraPosition? = null
 
     // variable to retrieve direction from extras
-    private var direction: String? = null
+    private var destination: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +59,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         // retrieve direction if it comes from work ticket screen
-        direction = intent.extras?.getString("direction")
+        destination = intent.extras?.getString("direction")
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -145,8 +143,17 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     ), DEFAULT_ZOOM.toFloat()
                                 )
                             )
-                            if (direction!=null)
-                                CoroutineScope(Dispatchers.IO).launch { getRoute() }
+                            // get directions to destination from Directions API
+                            if (destination!=null)
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val result = getRoute()
+                                    runOnUiThread {
+                                        // adds gps markers in the map
+                                        addMarkersToMap(result,map!!)
+                                        // draws the route line
+                                        addPolyline(result,map!!)
+                                    }
+                                }
 
                         }
                     } else {
@@ -208,6 +215,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.e("Exception: %s", e.message, e)
         }
     }
+    // establishes the conecction with the Directons API
     private fun getGeoContext(): GeoApiContext? {
         val geoApiContext = GeoApiContext()
         return geoApiContext.setQueryRateLimit(3)
@@ -216,15 +224,14 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
             .setReadTimeout(1, TimeUnit.SECONDS)
             .setWriteTimeout(1, TimeUnit.SECONDS)
     }
-    private fun getRoute(){
+    private fun getRoute(): DirectionsResult {
         val now = DateTime()
         val lat = lastKnownLocation!!.latitude.toString()
         val long = lastKnownLocation!!.longitude.toString()
-        val result: DirectionsResult =
-            DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin("$lat$long")
-                .destination(direction)
-                .departureTime(now).await()
-        addMarkersToMap(result,map!!)
+        val origin = "$lat,$long"
+        return DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin(origin)
+            .destination(destination)
+            .departureTime(now).await()
     }
     private fun addMarkersToMap(results: DirectionsResult, mMap: GoogleMap) {
         mMap.addMarker(
@@ -247,7 +254,6 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
                 results.routes[0].legs[0].startAddress
             )
         )
-        addPolyline(results,mMap)
     }
     private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
         val decodedPath: List<LatLng> = PolyUtil.decode(
@@ -263,8 +269,5 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Keys for storing activity state.
         private const val KEY_CAMERA_POSITION = "camera_position"
         private const val KEY_LOCATION = "location"
-
-        // Used for selecting the current place.
-        private const val M_MAX_ENTRIES = 5
     }
 }
