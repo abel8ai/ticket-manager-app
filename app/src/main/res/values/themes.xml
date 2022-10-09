@@ -1,16 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TicketManager" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.TicketManager" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/grey_20</item>
-        <item name="colorPrimaryVariant">@color/blue_dark</item>
+        <item name="colorPrimaryVariant">@color/grey_60</item>
         <item name="colorOnPrimary">@color/primary</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/primary</item>
         <item name="colorSecondaryVariant">@color/primary</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Close button icon -->
+        <item name="closeIcon">@drawable/ic_close_24</item>
+        <!-- Search button icon -->
+        <item name="searchIcon">@drawable/ic_search_24</item>
+        <!-- Commit icon shown in the query suggestion row -->
+        <item name="commitIcon">@drawable/ic_arrow_forward_24</item>
     </style>
 </resources>

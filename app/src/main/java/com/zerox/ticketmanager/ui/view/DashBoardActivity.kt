@@ -73,7 +73,10 @@ class DashBoardActivity : AppCompatActivity() {
                 dashboardViewModel.getLastTicketCreated()
             }
         }
-
+        // on click listener for get directions menu element
+        binding.fabGetDirections.setOnClickListener {
+            startActivity(Intent(this,DirectionsActivity::class.java))
+        }
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
             showAddTicketDialog()

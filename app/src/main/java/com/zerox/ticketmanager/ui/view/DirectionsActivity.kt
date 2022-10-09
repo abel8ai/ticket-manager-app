@@ -6,6 +6,9 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -58,8 +61,40 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityDirectionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // set title and back function for the support action bar
+        supportActionBar!!.title = resources.getString(R.string.directions_title)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         // retrieve direction if it comes from work ticket screen
         destination = intent.extras?.getString("direction")
+
+        // set the direction in searchview if it comes from work ticket screen
+        if(destination != null){
+            binding.svDirection.setQuery(destination, false)
+        }
+
+        // listener to update route when the user submits new direction
+        binding.svDirection.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    destination = query
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val result = getRoute()
+                        runOnUiThread {
+                            // adds gps markers in the map
+                            addMarkersToMap(result,map!!)
+                            // draws the route line
+                            addPolyline(result,map!!)
+                        }
+                    }
+                }
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -87,6 +122,10 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
     override fun onMapReady(map: GoogleMap) {
         this.map = map
         // Prompt the user for permission.

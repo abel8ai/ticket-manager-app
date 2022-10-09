@@ -5,17 +5,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zerox.ticketmanager.R
+import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityWorkTicketBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.view.adapters.ViewPagerAdapter
+import com.zerox.ticketmanager.ui.viewmodel.WorkTicketViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class WorkTicketActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityWorkTicketBinding
+    // viewmodel injection
+    private val workTicketViewModel : WorkTicketViewModel by viewModels()
+    private lateinit var ticket: TicketEntity
     // variable to get ticket id from extras
     private var ticketId = -1;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +38,14 @@ class WorkTicketActivity : AppCompatActivity() {
         ticketId = intent.extras!!.getInt("ticket_id")
         initTab()
 
+        // observer to receive the ticket once is tha data is available
+        workTicketViewModel.ticketModel.observe(this) {
+            ticket = it
+        }
+        // retrieve ticket from database
+        CoroutineScope(Dispatchers.IO).launch {
+            workTicketViewModel.getTicketById(ticketId)
+        }
     }
 
     private fun initTab(){
@@ -66,7 +83,8 @@ class WorkTicketActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.go_to_directions ->{
-                val intent = Intent(this,DirectionsActivity::class.java)
+                val intent = Intent(this, DirectionsActivity::class.java)
+                intent.putExtra("direction", ticket.address)
                 startActivity(intent)
             }
         }
