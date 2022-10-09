@@ -1,14 +1,29 @@
 package com.zerox.ticketmanager.ui.view
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.EditText
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.json.JsonFactory
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.client.util.DateTime
+import com.google.api.services.calendar.model.Event
+import com.google.api.services.calendar.model.EventAttendee
+import com.google.api.services.calendar.model.EventDateTime
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
@@ -27,6 +42,10 @@ import kotlinx.coroutines.launch
 class DashBoardActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityDashboardBinding
+    val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
+    private val JSON_FACTORY: JsonFactory = GsonFactory.getDefaultInstance()
+    private val RC_SIGN_IN: Int = 44556
+    private var credential: GoogleCredential? = null
     // inject the dashboard viewmodel into the activity
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var ticketList = emptyList<TicketEntity>()
@@ -46,8 +65,8 @@ class DashBoardActivity : AppCompatActivity() {
             initRecyclerView()
         }
         dashboardViewModel.ticketModel.observe(this) {
-            val intent = Intent(this@DashBoardActivity,WorkTicketActivity::class.java)
-            intent.putExtra("ticket_id",it.id)
+            val intent = Intent(this@DashBoardActivity, WorkTicketActivity::class.java)
+            intent.putExtra("ticket_id", it.id)
             startActivity(intent)
         }
 
@@ -75,11 +94,15 @@ class DashBoardActivity : AppCompatActivity() {
         }
         // on click listener for get directions menu element
         binding.fabGetDirections.setOnClickListener {
-            startActivity(Intent(this,DirectionsActivity::class.java))
+            startActivity(Intent(this, DirectionsActivity::class.java))
         }
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
             showAddTicketDialog()
+        }
+        // on click listener to sync tickets into calendar
+        binding.fabSyncCalendar.setOnClickListener {
+            signIn()
         }
 
         // load tickets information from database
@@ -129,7 +152,7 @@ class DashBoardActivity : AppCompatActivity() {
                 }
             } else {
                 // create ticket and store it in database
-                val ticket = TicketEntity(null, mClientName,phone,               mAddress, mDate)
+                val ticket = TicketEntity(null, mClientName, phone, mAddress, mDate)
                 CoroutineScope(Dispatchers.IO).launch {
                     dashboardViewModel.addTicket(ticket)
                 }
@@ -157,6 +180,37 @@ class DashBoardActivity : AppCompatActivity() {
                 etDate.text = selectedDate
             }
         newFragment.show(supportFragmentManager, "datePicker")
+    }
+    
+    private fun getSignInClient(): GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        return GoogleSignIn.getClient(this, gso)
+    }
+    private fun signIn() {
+        val signInIntent = getSignInClient().signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            credential = GoogleCredential().setAccessToken(account.idToken)
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(ContentValues.TAG, "signInResult:failed code=" + e.statusCode)
+        }
     }
 
     override fun onBackPressed() {
