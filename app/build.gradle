@@ -35,6 +35,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    configurations {
+        all { // You should exclude one of them not both of them
+            //exclude group: "com.android.support", module: "support-v4"
+        }
+    }
     buildFeatures {
         viewBinding = true
     }

@@ -108,6 +108,10 @@ class DashBoardActivity : AppCompatActivity() {
         binding.fabSyncCalendar.setOnClickListener {
             signIn()
         }
+        // on click listener to show tickets into calendar
+        binding.fabCalendar.setOnClickListener {
+            startActivity(Intent(this,CalendarActivity::class.java))
+        }
 
         // load tickets information from database
         loadData()
