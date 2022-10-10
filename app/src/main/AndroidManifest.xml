@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketManager"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.view.CalendarActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -28,12 +31,12 @@
 
         <activity
             android:name=".ui.view.DirectionsActivity"
-            android:screenOrientation="landscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.view.WorkTicketActivity"
-            android:screenOrientation="landscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.view.DashBoardActivity"
             android:exported="false" />
