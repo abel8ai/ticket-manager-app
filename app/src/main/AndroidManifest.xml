@@ -39,6 +39,8 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.view.DashBoardActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".ui.view.LoginActivity"

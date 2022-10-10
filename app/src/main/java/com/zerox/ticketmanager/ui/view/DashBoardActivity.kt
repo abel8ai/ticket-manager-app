@@ -1,6 +1,7 @@
 package com.zerox.ticketmanager.ui.view
 
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -60,7 +61,6 @@ class DashBoardActivity : AppCompatActivity() {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // configure the support action bar's title
-        supportActionBar!!.title = resources.getString(R.string.dashboard_title)
 
         // observers to receive tickets data when ready
         dashboardViewModel.ticketsModel.observe(this) {
@@ -236,6 +236,12 @@ class DashBoardActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.dialog_exit_app))
+        builder.setMessage("Are you sure you want to close the app?")
+        builder.create()
+        builder.setPositiveButton("Accept") { _, _ -> finish()}
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog!!.dismiss() }
+        builder.show()
     }
 }

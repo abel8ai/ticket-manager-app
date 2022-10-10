@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this,DashBoardActivity::class.java)
             intent.putExtra("user_id",user.id)
             startActivity(intent)
+            finish()
         }
         CoroutineScope(Dispatchers.IO).launch {
             loginViewModel.addDummyUser()
