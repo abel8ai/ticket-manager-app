@@ -29,6 +29,17 @@
     <string name="ticket_no">Ticket # </string>
     <string name="enter_destination">Enter destination</string>
     <string name="dashboard_caps">DASHBOARD</string>
+    <string name="customer_info">Customer Info:</string>
+    <string name="customer_preview">-----------</string>
+    <string name="phone_preview">-------------------</string>
+    <string name="job_site_address">Job Site Address:</string>
+    <string name="dispatch_notes">Dispatch Notes:</string>
+    <string name="dept_class">Dept. Class:</string>
+    <string name="service_type">Service Type:</string>
+    <string name="get_directions">Get Directions</string>
+    <string name="scheduled_for">Scheduled for:</string>
+    <string name="fecha_preview">--/--/----</string>
+    <string name="time_preview">--:-- --</string>
 
 
 </resources>

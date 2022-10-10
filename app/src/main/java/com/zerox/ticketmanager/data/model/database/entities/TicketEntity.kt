@@ -16,6 +16,7 @@ data class TicketEntity(
     @ColumnInfo val deptClass:String,
     @ColumnInfo val serviceType:String,
     @ColumnInfo val notes:String,
+    @ColumnInfo val reasonCall:String,
     @ColumnInfo val address: String,
     @ColumnInfo val time: String,
     @ColumnInfo val date: String

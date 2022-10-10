@@ -49,6 +49,11 @@ class OverviewFragment : Fragment() {
             binding.tvPhone.text = it.phoneNumber
             binding.tvAddress.text = it.address
             binding.tvDate.text = it.date
+            binding.tvNotes.text = it.notes
+            binding.tvDeptClass.text = it.deptClass
+            binding.tvServiceType.text = it.serviceType
+            binding.tvReasonCall.text = it.reasonCall
+            binding.tvTime.text = it.time
         }
         // retrieve ticket from database
         CoroutineScope(Dispatchers.IO).launch {
