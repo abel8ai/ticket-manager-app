@@ -34,6 +34,8 @@
                     android:id="@+id/customer_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:text="Customer Info:"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -41,6 +43,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -84,6 +87,8 @@
                     android:id="@+id/tv_scheduled_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:text="Scheduled for:"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -92,6 +97,7 @@
                     android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
                     android:text="25/10/2022"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_scheduled_label" />
@@ -102,8 +108,8 @@
             android:id="@+id/v_first_divider"
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:background="@color/divider"
             app:layout_constraintTop_toBottomOf="@id/ll_client_data" />
 
@@ -129,6 +135,8 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -138,7 +146,8 @@
                         android:background="@drawable/ic_location_on_24" />
 
                     <TextView
-                        android:id="@+id/tv_address_laber"
+                        android:id="@+id/tv_address_label"
+                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Job Site Address:" />
@@ -148,11 +157,14 @@
                     android:id="@+id/tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
                     android:text="Calle B e/2da y 3ra" />
                 <Button
                     android:id="@+id/btn_directions"
-                    android:text="Go To Directions"
+                    android:text="Get Directions"
                     android:textColor="@color/white"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:backgroundTint="@color/primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -174,6 +186,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -183,6 +197,7 @@
 
                     <TextView
                         android:id="@+id/tv_notes_label"
+                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dispatch Notes" />
@@ -191,12 +206,14 @@
                 <TextView
                     android:id="@+id/tv_notes"
                     android:layout_width="wrap_content"
+                    android:layout_marginStart="30dp"
                     android:layout_height="wrap_content"
                     android:text="Big text" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@color/divider" />
 
                 <LinearLayout
@@ -213,12 +230,15 @@
 
                         <TextView
                             android:layout_width="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="10dp"
                             android:layout_height="wrap_content"
                             android:text="Dept. Class: " />
 
                         <TextView
                             android:id="@+id/tv_dept_class"
                             android:layout_width="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:layout_height="wrap_content"
                             android:text="Plumbing" />
                     </LinearLayout>
@@ -231,6 +251,7 @@
 
                         <TextView
                             android:layout_width="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:layout_height="wrap_content"
                             android:text="Service Type: " />
 
@@ -238,6 +259,7 @@
                             android:id="@+id/tv_service_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:text="Call Back" />
                     </LinearLayout>
 
@@ -262,6 +284,7 @@
                 android:layout_weight="0.2"
                 android:gravity="center_horizontal"
                 android:layout_width="0dp"
+                android:layout_marginStart="30dp"
                 android:layout_height="wrap_content"
                 android:text="Reason for Call: " />
             <TextView
@@ -274,7 +297,6 @@
             <TextView
                 android:id="@+id/ticket_number"
                 android:layout_weight="0.2"
-                android:layout_marginStart="10dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/ticket_no" />

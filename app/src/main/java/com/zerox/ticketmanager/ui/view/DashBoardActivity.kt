@@ -240,7 +240,7 @@ class DashBoardActivity : AppCompatActivity() {
         builder.setTitle(resources.getString(R.string.dialog_exit_app))
         builder.setMessage("Are you sure you want to close the app?")
         builder.create()
-        builder.setPositiveButton("Accept") { _, _ -> finish()}
+        builder.setPositiveButton("Accept") { _, _ -> finishAffinity()}
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog!!.dismiss() }
         builder.show()
     }
