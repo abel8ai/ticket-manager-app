@@ -18,6 +18,8 @@ class TicketViewHolder(view:View):RecyclerView.ViewHolder(view){
         binding.tvIdTicket.text = result
         binding.tvAddress.text = ticket.address
         binding.tvDate.text = ticket.date
+        binding.tvMotive.text = ticket.motive
+        binding.tvTime.text = ticket.time
         binding.btnViewTicket.setOnClickListener {
             val intent = Intent(binding.root.context,WorkTicketActivity::class.java)
             intent.putExtra("ticket_id",ticket.id)
