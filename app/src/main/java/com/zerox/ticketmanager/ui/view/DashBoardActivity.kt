@@ -49,9 +49,10 @@ class DashBoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardBinding
     private val RC_SIGN_IN: Int = 44556
     private val RC_GET_AUTH_CODE: Int = 4455622
-    private var writingPermissionGranted:Boolean = false
+    private var writingPermissionGranted: Boolean = false
     private val REQUEST_WRITE_EXTERNAL_STORAGE = 334533
     private lateinit var credential: GoogleCredential
+
     // inject the dashboard viewmodel into the activity
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var ticketList = emptyList<TicketEntity>()
@@ -80,7 +81,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         //on click listener to display menu elements with animation
         binding.fabMenu.setOnClickListener {
-            isRotated = ViewAnimation.rotateFab(it, !isRotated)
+            isRotated = ViewAnimation.rotateFab(binding.fabMenuIcon, !isRotated)
             if (isRotated) {
                 ViewAnimation.showIn(binding.fabWorkTicket)
                 ViewAnimation.showIn(binding.fabGetDirections)
@@ -110,7 +111,7 @@ class DashBoardActivity : AppCompatActivity() {
         }
         // on click listener to show tickets into calendar
         binding.fabCalendar.setOnClickListener {
-            startActivity(Intent(this,CalendarActivity::class.java))
+            startActivity(Intent(this, CalendarActivity::class.java))
         }
 
         // load tickets information from database
@@ -138,29 +139,68 @@ class DashBoardActivity : AppCompatActivity() {
         dialogBinding.btAdicionar.setOnClickListener {
 
             // getting the values from the dialog's viewBinding
-            val mClientName = dialogBinding.etClientName.text.toString()
-            val mAddress = dialogBinding.etAddress.text.toString()
-            val mDate = dialogBinding.etDate.text.toString()
+            val clientName = dialogBinding.etClientName.text.toString()
+            val address = dialogBinding.etAddress.text.toString()
+            val date = dialogBinding.etDate.text.toString()
             val phone = dialogBinding.etPhone.text.toString()
+            val motive = dialogBinding.etMotive.text.toString()
+            val deptClass = dialogBinding.etDeptClass.text.toString()
+            val notes = dialogBinding.etNotes.text.toString()
+            val reasonCall = dialogBinding.etReasonCall.text.toString()
+            val serviceType = dialogBinding.etServiceType.text.toString()
+            val time = dialogBinding.etTime.text.toString()
 
             // fields validation
-            if (mClientName.isEmpty() || mAddress.isEmpty() || mDate.isEmpty()) {
+            if (clientName.isEmpty() || address.isEmpty() || date.isEmpty() || phone.isEmpty()
+                || motive.isEmpty() || deptClass.isEmpty() || notes.isEmpty() || reasonCall.isEmpty()
+                || serviceType.isEmpty() || time.isEmpty()) {
                 val hint = resources.getString(R.string.mandatory_field)
                 if (dialogBinding.etClientName.text.isEmpty()) {
                     dialogBinding.etClientName.hint = hint
-                    dialogBinding.etClientName.setHintTextColor(Color.RED)
+                    dialogBinding.etClientName.setHintTextColor(resources.getColor(R.color.light_red))
                 }
                 if (dialogBinding.etAddress.text.isEmpty()) {
                     dialogBinding.etAddress.hint = hint
-                    dialogBinding.etAddress.setHintTextColor(Color.RED)
+                    dialogBinding.etAddress.setHintTextColor(resources.getColor(R.color.light_red))
                 }
                 if (dialogBinding.etDate.text.isEmpty()) {
                     dialogBinding.etDate.hint = hint
-                    dialogBinding.etDate.setHintTextColor(Color.RED)
+                    dialogBinding.etDate.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etPhone.text.isEmpty()) {
+                    dialogBinding.etPhone.hint = hint
+                    dialogBinding.etPhone.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etNotes.text.isEmpty()) {
+                    dialogBinding.etNotes.hint = hint
+                    dialogBinding.etNotes.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etMotive.text.isEmpty()) {
+                    dialogBinding.etMotive.hint = hint
+                    dialogBinding.etMotive.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etDeptClass.text.isEmpty()) {
+                    dialogBinding.etDeptClass.hint = hint
+                    dialogBinding.etDeptClass.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etServiceType.text.isEmpty()) {
+                    dialogBinding.etServiceType.hint = hint
+                    dialogBinding.etServiceType.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etTime.text.isEmpty()) {
+                    dialogBinding.etTime.hint = hint
+                    dialogBinding.etTime.setHintTextColor(resources.getColor(R.color.light_red))
+                }
+                if (dialogBinding.etReasonCall.text.isEmpty()) {
+                    dialogBinding.etReasonCall.hint = hint
+                    dialogBinding.etReasonCall.setHintTextColor(resources.getColor(R.color.light_red))
                 }
             } else {
                 // create ticket and store it in database
-                val ticket = TicketEntity(null, mClientName, phone, mAddress, mDate)
+                val ticket = TicketEntity(
+                    null, motive, clientName, phone, deptClass, serviceType,
+                    notes, reasonCall, address, time, date
+                )
                 CoroutineScope(Dispatchers.IO).launch {
                     dashboardViewModel.addTicket(ticket)
                 }
@@ -198,12 +238,15 @@ class DashBoardActivity : AppCompatActivity() {
                 .requestProfile()
                 .requestIdToken(BuildConfig.CLIENT_ID)
                 .requestServerAuthCode(BuildConfig.CLIENT_ID, true)
-                .build())
+                .build()
+        )
     }
+
     private fun signIn() {
         val signInIntent = getSignInClient().signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -214,13 +257,16 @@ class DashBoardActivity : AppCompatActivity() {
             handleSignInResult(task)
         }
     }
+
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val result = completedTask.getResult(ApiException::class.java)
-            val scope = "oauth2:https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile"
+            val scope =
+                "oauth2:https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile"
             var accessToken = ""
             CoroutineScope(Dispatchers.IO).launch {
-                accessToken = GoogleAuthUtil.getToken(this@DashBoardActivity, result.account!!, scope)
+                accessToken =
+                    GoogleAuthUtil.getToken(this@DashBoardActivity, result.account!!, scope)
             }
 
             val credential = GoogleCredential().setAccessToken(accessToken)
@@ -240,7 +286,7 @@ class DashBoardActivity : AppCompatActivity() {
         builder.setTitle(resources.getString(R.string.dialog_exit_app))
         builder.setMessage("Are you sure you want to close the app?")
         builder.create()
-        builder.setPositiveButton("Accept") { _, _ -> finishAffinity()}
+        builder.setPositiveButton("Accept") { _, _ -> finishAffinity() }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog!!.dismiss() }
         builder.show()
     }

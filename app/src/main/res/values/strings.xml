@@ -26,7 +26,7 @@
     <string name="purchasing">Purchasing</string>
     <string name="pic_logo">Picture Logo</string>
     <string name="work_details">Work Details</string>
-    <string name="ticket_no">Ticket # </string>
+    <string name="ticket_no">Ticket</string>
     <string name="enter_destination">Enter destination</string>
     <string name="dashboard_caps">DASHBOARD</string>
     <string name="customer_info">Customer Info:</string>
@@ -40,6 +40,9 @@
     <string name="scheduled_for">Scheduled for:</string>
     <string name="fecha_preview">--/--/----</string>
     <string name="time_preview">--:-- --</string>
+    <string name="new_ticket">New Ticket</string>
+    <string name="sync">Sync</string>
+    <string name="calendar">Calendar</string>
 
 
 </resources>
