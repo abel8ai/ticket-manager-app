@@ -3,27 +3,28 @@ package com.zerox.ticketmanager.ui.view
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.GoogleAuthUtil
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+
 import com.google.android.gms.common.api.ApiException
+
 import com.google.android.gms.tasks.Task
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.json.JsonFactory
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.client.util.DateTime
-import com.google.api.services.calendar.model.Event
-import com.google.api.services.calendar.model.EventAttendee
-import com.google.api.services.calendar.model.EventDateTime
+
+import com.zerox.ticketmanager.BuildConfig
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
@@ -36,16 +37,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 
 
 @AndroidEntryPoint
 class DashBoardActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityDashboardBinding
-    val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
-    private val JSON_FACTORY: JsonFactory = GsonFactory.getDefaultInstance()
     private val RC_SIGN_IN: Int = 44556
-    private var credential: GoogleCredential? = null
+    private val RC_GET_AUTH_CODE: Int = 4455622
+    private var writingPermissionGranted:Boolean = false
+    private val REQUEST_WRITE_EXTERNAL_STORAGE = 334533
+    private lateinit var credential: GoogleCredential
     // inject the dashboard viewmodel into the activity
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var ticketList = emptyList<TicketEntity>()
@@ -54,7 +59,6 @@ class DashBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         // configure the support action bar's title
         supportActionBar!!.title = resources.getString(R.string.dashboard_title)
 
@@ -181,12 +185,16 @@ class DashBoardActivity : AppCompatActivity() {
             }
         newFragment.show(supportFragmentManager, "datePicker")
     }
-    
+
     private fun getSignInClient(): GoogleSignInClient {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        return GoogleSignIn.getClient(this, gso)
+        return GoogleSignIn.getClient(
+            this,
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestIdToken(BuildConfig.CLIENT_ID)
+                .requestServerAuthCode(BuildConfig.CLIENT_ID, true)
+                .build())
     }
     private fun signIn() {
         val signInIntent = getSignInClient().signInIntent
@@ -204,8 +212,18 @@ class DashBoardActivity : AppCompatActivity() {
     }
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            val account = completedTask.getResult(ApiException::class.java)
-            credential = GoogleCredential().setAccessToken(account.idToken)
+            val result = completedTask.getResult(ApiException::class.java)
+            val scope = "oauth2:https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile"
+            var accessToken = ""
+            CoroutineScope(Dispatchers.IO).launch {
+                accessToken = GoogleAuthUtil.getToken(this@DashBoardActivity, result.account!!, scope)
+            }
+
+            val credential = GoogleCredential().setAccessToken(accessToken)
+            CoroutineScope(Dispatchers.IO).launch {
+                dashboardViewModel.createGoogleCalendarEvent(credential)
+            }
+
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
