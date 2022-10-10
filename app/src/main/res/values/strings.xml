@@ -3,7 +3,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="mandatory_field">Mandatory field</string>
+    <string name="mandatory_field">Required field</string>
     <string name="view_ticket">view ticket</string>
     <string name="client_preview">Robert Perez</string>
     <string name="button_add">Add</string>

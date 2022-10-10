@@ -43,6 +43,7 @@
         <activity
             android:name=".ui.view.LoginActivity"
             android:exported="false"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ui.view.MainActivity"

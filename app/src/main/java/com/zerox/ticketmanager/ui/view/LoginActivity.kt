@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -51,14 +52,16 @@ class LoginActivity : AppCompatActivity() {
                 val hint = resources.getString(R.string.mandatory_field)
                 if (mUsername.isEmpty()) {
                     binding.etUsername.hint = hint
-                    binding.etUsername.setHintTextColor(Color.RED)
+                    binding.etUsername.setHintTextColor(resources.getColor(R.color.light_red))
                 }
                 if (mPassword.isEmpty()) {
                     binding.etPassword.hint = hint
-                    binding.etPassword.setHintTextColor(Color.RED)
+                    binding.etPassword.setHintTextColor(resources.getColor(R.color.light_red))
                 }
-            } else
-            // launching the suspend fun from Coroutine
+            } else{
+                binding.btnLoginText.visibility = View.GONE
+                binding.btnLoginPb.visibility = View.VISIBLE
+                // launching the suspend fun from Coroutine
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         loginViewModel.doLogin(mUsername, mPassword)
@@ -69,10 +72,15 @@ class LoginActivity : AppCompatActivity() {
                                 exception.message,
                                 Toast.LENGTH_SHORT
                             ).show()
+                            binding.btnLoginText.visibility = View.VISIBLE
+                            binding.btnLoginPb.visibility = View.GONE
                         }
                     }
 
                 }
+            }
+
+
 
         }
     }

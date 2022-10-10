@@ -17,5 +17,6 @@
 
     <color name="selected_color">#3DCB01</color>
     <color name="unselected_color">#666666</color>
+    <color name="light_red">#F1A1A1</color>
 
 </resources>
