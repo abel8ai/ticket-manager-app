@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.view.CalendarActivity">
 
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:mcv_showOtherDates="all"
+        app:mcv_selectionMode="multiple"
+        app:mcv_selectionColor="#00F"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

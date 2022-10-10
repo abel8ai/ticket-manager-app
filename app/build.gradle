@@ -37,7 +37,8 @@ android {
     }
     configurations {
         all { // You should exclude one of them not both of them
-            //exclude group: "com.android.support", module: "support-v4"
+            exclude group: "com.android.support", module: "support-compat"
+            exclude group: "com.android.support", module: "support-v4"
         }
     }
     buildFeatures {
@@ -85,4 +86,6 @@ dependencies {
 
     //layouts for map
     implementation 'com.github.zladnrms:RoundableLayout:1.1.3'
+
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 }

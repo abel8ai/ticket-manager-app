@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -31,6 +32,7 @@ import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.utils.DatePickerFragment
+import com.zerox.ticketmanager.ui.utils.TimePickerFragment
 import com.zerox.ticketmanager.ui.utils.ViewAnimation
 import com.zerox.ticketmanager.ui.view.adapters.TicketAdapter
 import com.zerox.ticketmanager.ui.viewmodel.DashboardViewModel
@@ -126,6 +128,9 @@ class DashBoardActivity : AppCompatActivity() {
         dialogBinding.etDate.setOnClickListener {
             showDatePicker(dialogBinding.etDate)
         }
+        dialogBinding.etTime.setOnClickListener {
+            showTimePicker(dialogBinding.etTime)
+        }
         // building the Alert Dialog
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
@@ -209,6 +214,15 @@ class DashBoardActivity : AppCompatActivity() {
         }
     }
 
+    private fun showTimePicker(etTime: TextView) {
+        val newFragment: TimePickerFragment =
+            TimePickerFragment.newInstance { timepicker, hour, minutes ->
+                val selectedTime = "$hour:$minutes"
+                etTime.text = selectedTime
+            }
+        newFragment.show(supportFragmentManager, "datePicker")
+    }
+
     private fun loadData() {
         CoroutineScope(Dispatchers.IO).launch {
             dashboardViewModel.getAllTickets()
@@ -224,7 +238,7 @@ class DashBoardActivity : AppCompatActivity() {
     private fun showDatePicker(etDate: TextView) {
         val newFragment: DatePickerFragment =
             DatePickerFragment.newInstance { datePicker, year, month, day ->
-                val selectedDate: String = day.toString() + "/" + (month + 1) + "/" + year
+                val selectedDate = day.toString() + "/" + (month + 1) + "/" + year
                 etDate.text = selectedDate
             }
         newFragment.show(supportFragmentManager, "datePicker")
