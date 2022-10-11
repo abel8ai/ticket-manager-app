@@ -217,7 +217,11 @@ class DashBoardActivity : AppCompatActivity() {
     private fun showTimePicker(etTime: TextView) {
         val newFragment: TimePickerFragment =
             TimePickerFragment.newInstance { timepicker, hour, minutes ->
-                val selectedTime = "$hour:$minutes"
+                var selectedTime = ""
+                if(hour < 12)
+                    selectedTime = "$hour:$minutes am"
+                else
+                    selectedTime = "${hour-12}:$minutes pm"
                 etTime.text = selectedTime
             }
         newFragment.show(supportFragmentManager, "datePicker")
