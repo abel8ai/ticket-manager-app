@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.view.CalendarActivity">
+    <LinearLayout
+        android:background="@color/back"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:mcv_showOtherDates="all"
+            app:mcv_selectionMode="multiple"
+            app:mcv_selectionColor="@color/primary"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tickets"
+            android:layout_margin="10dp"
+
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            tools:listitem="@layout/item_ticket_reduced"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
