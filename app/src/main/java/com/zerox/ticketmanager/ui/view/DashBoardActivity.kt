@@ -108,7 +108,11 @@ class DashBoardActivity : AppCompatActivity() {
                     dashboardViewModel.getLastTicketCreated()
                 } catch (exception: Exception) {
                     runOnUiThread {
-                        Toast.makeText(this@DashBoardActivity, exception.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@DashBoardActivity,
+                            exception.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -238,11 +242,18 @@ class DashBoardActivity : AppCompatActivity() {
     private fun showTimePicker(etTime: TextView) {
         val newFragment: TimePickerFragment =
             TimePickerFragment.newInstance { timepicker, hour, minutes ->
+                var finalMinutes = ""
+                if (minutes < 10)
+                    finalMinutes = "0$minutes"
+
+                else
+                    finalMinutes = minutes.toString()
+
                 var selectedTime = ""
                 if (hour < 12)
-                    selectedTime = "$hour:$minutes am"
+                    selectedTime = "$hour:$finalMinutes am"
                 else
-                    selectedTime = "${hour - 12}:$minutes pm"
+                    selectedTime = "${hour - 12}:$finalMinutes pm"
                 etTime.text = selectedTime
             }
         newFragment.show(supportFragmentManager, "datePicker")
