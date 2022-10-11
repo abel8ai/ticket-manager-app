@@ -5,7 +5,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
 
-
+// Singleton to animate buttons
 object ViewAnimation {
 
     fun rotateFab(v: View, rotate: Boolean): Boolean {

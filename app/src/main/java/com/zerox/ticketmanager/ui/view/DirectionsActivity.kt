@@ -133,11 +133,13 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onSaveInstanceState(outState)
     }
 
+    // back button
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
 
+    // get location permission and location when the map is ready
     override fun onMapReady(map: GoogleMap) {
         this.map = map
         // Prompt the user for permission.
@@ -230,6 +232,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    // get the permission result
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -257,7 +260,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * Updates the map's UI setti+ngs based on whether the user has granted location permission.
+     * Updates the map's UI settings based on whether the user has granted location permission.
      */
     @SuppressLint("MissingPermission")
     private fun updateLocationUI() {
@@ -289,6 +292,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
             .setWriteTimeout(1, TimeUnit.SECONDS)
     }
 
+    // get the route to destination
     private fun getRoute(): DirectionsResult {
         val now = DateTime()
         val lat = lastKnownLocation!!.latitude.toString()
@@ -300,6 +304,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         return route.await()
     }
 
+    // put destination marker in the map
     private fun addMarkersToMap(results: DirectionsResult, mMap: GoogleMap) {
         mMap.clear()
         mMap.addMarker(
@@ -313,7 +318,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         )
     }
-
+    // draw line from current location to destination
     private fun addPolyline(results: DirectionsResult, mMap: GoogleMap) {
         val decodedPath: List<LatLng> = PolyUtil.decode(
             results.routes[0].overviewPolyline.encodedPath
@@ -321,6 +326,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addPolyline(PolylineOptions().addAll(decodedPath))
     }
 
+    // static field
     companion object {
         private val TAG = DirectionsActivity::class.java.simpleName
         private const val DEFAULT_ZOOM = 15

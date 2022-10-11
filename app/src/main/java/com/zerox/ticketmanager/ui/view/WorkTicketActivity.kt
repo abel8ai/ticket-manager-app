@@ -39,7 +39,7 @@ class WorkTicketActivity : AppCompatActivity() {
         initTab()
 
         // observer to receive the ticket once is tha data is available
-        workTicketViewModel.ticketModel.observe(this) {
+        workTicketViewModel.ticket.observe(this) {
             ticket = it
         }
         // retrieve ticket from database
@@ -47,7 +47,7 @@ class WorkTicketActivity : AppCompatActivity() {
             workTicketViewModel.getTicketById(ticketId)
         }
     }
-
+    // initialize the tab layout with all the fragments
     private fun initTab(){
         val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle,ticketId)
         binding.vpSections.adapter = adapter
@@ -90,6 +90,7 @@ class WorkTicketActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+    // back button in action bar
     override fun onSupportNavigateUp(): Boolean {
         startActivity(Intent(this,DashBoardActivity::class.java))
         return super.onSupportNavigateUp()

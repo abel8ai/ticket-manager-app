@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// user data class to save into database
 @Entity(tableName = "user")
 data class UserEntitiy(
     @PrimaryKey(autoGenerate = true)

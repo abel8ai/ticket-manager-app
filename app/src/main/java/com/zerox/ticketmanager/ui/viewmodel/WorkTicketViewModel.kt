@@ -12,10 +12,11 @@ import javax.inject.Inject
 class WorkTicketViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel(){
-    private val _ticketModel = MutableLiveData<TicketEntity>()
-    val ticketModel : LiveData<TicketEntity> get() = _ticketModel
+    // live data to get ticket by id and notify the view
+    private val _ticket = MutableLiveData<TicketEntity>()
+    val ticket : LiveData<TicketEntity> get() = _ticket
 
     suspend fun getTicketById(id:Int){
-        _ticketModel.postValue(repository.getTicketById(id))
+        _ticket.postValue(repository.getTicketById(id))
     }
 }

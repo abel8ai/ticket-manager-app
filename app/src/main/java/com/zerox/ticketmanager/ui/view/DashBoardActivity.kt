@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.createSavedStateHandle
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -49,35 +51,38 @@ import java.io.IOException
 class DashBoardActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityDashboardBinding
+
+    // request code to get logged google account
     private val RC_SIGN_IN: Int = 44556
-    private val RC_GET_AUTH_CODE: Int = 4455622
-    private var writingPermissionGranted: Boolean = false
-    private val REQUEST_WRITE_EXTERNAL_STORAGE = 334533
-    private lateinit var credential: GoogleCredential
 
     // inject the dashboard viewmodel into the activity
     private val dashboardViewModel: DashboardViewModel by viewModels()
+
     private var ticketList = emptyList<TicketEntity>()
+
+    // for animation purposes, if is rotated means that the submenu buttons are showned
     private var isRotated = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // configure the support action bar's title
 
-        // observers to receive tickets data when ready
-        dashboardViewModel.ticketsModel.observe(this) {
+        // observer to receive tickets data when ready
+        dashboardViewModel.allTickets.observe(this) {
             ticketList = it
             // initialize recyclerview with all the tickets
             initRecyclerView()
         }
-        dashboardViewModel.ticketModel.observe(this) {
+
+        //observer to get last ticket created and launch Work ticket screen with that ticket's id
+        dashboardViewModel.ticket.observe(this) {
             val intent = Intent(this@DashBoardActivity, WorkTicketActivity::class.java)
             intent.putExtra("ticket_id", it.id)
             startActivity(intent)
         }
 
-        // initialization for the menu elements
+
+        // initialization for the menu elements animator
         ViewAnimation.init(binding.fabWorkTicket)
         ViewAnimation.init(binding.fabGetDirections)
 
@@ -95,6 +100,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         // on click listener for work ticket menu element
         binding.fabWorkTicket.setOnClickListener {
+            // running coroutine to get last ticket created
             CoroutineScope(Dispatchers.IO).launch {
                 dashboardViewModel.getLastTicketCreated()
             }
@@ -108,10 +114,11 @@ class DashBoardActivity : AppCompatActivity() {
             showAddTicketDialog()
         }
         // on click listener to sync tickets into calendar
+        // nor working due to inability to get a proper credential from Google SignIn
         binding.fabSyncCalendar.setOnClickListener {
-            signIn()
+            //signIn()
         }
-        // on click listener to show tickets into calendar
+        // on click listener to show tickets in calendar view
         binding.fabCalendar.setOnClickListener {
             startActivity(Intent(this, CalendarActivity::class.java))
         }
@@ -209,11 +216,13 @@ class DashBoardActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.IO).launch {
                     dashboardViewModel.addTicket(ticket)
                 }
+                // close the dialog when finished
                 dialog.dismiss()
             }
         }
     }
 
+    // dialog to load TimePicker Fragment and select time when clicking on the time edittext
     private fun showTimePicker(etTime: TextView) {
         val newFragment: TimePickerFragment =
             TimePickerFragment.newInstance { timepicker, hour, minutes ->
@@ -226,6 +235,16 @@ class DashBoardActivity : AppCompatActivity() {
             }
         newFragment.show(supportFragmentManager, "datePicker")
     }
+    // dialog to load DatePicker Fragment and select date when clicking on the time edittext
+    private fun showDatePicker(etDate: TextView) {
+        val newFragment: DatePickerFragment =
+            DatePickerFragment.newInstance { datePicker, year, month, day ->
+                val selectedDate = day.toString() + "/" + (month + 1) + "/" + year
+                etDate.text = selectedDate
+            }
+        newFragment.show(supportFragmentManager, "datePicker")
+    }
+
 
     private fun loadData() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -239,15 +258,22 @@ class DashBoardActivity : AppCompatActivity() {
         binding.rvTickets.adapter = adapter
     }
 
-    private fun showDatePicker(etDate: TextView) {
-        val newFragment: DatePickerFragment =
-            DatePickerFragment.newInstance { datePicker, year, month, day ->
-                val selectedDate = day.toString() + "/" + (month + 1) + "/" + year
-                etDate.text = selectedDate
-            }
-        newFragment.show(supportFragmentManager, "datePicker")
+    // closing app confirmation dialog
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.dialog_exit_app))
+        builder.setMessage("Are you sure you want to close the app?")
+        builder.create()
+        builder.setPositiveButton("Accept") { _, _ -> finishAffinity() }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog!!.dismiss() }
+        builder.show()
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // from here on are the methods to get google account and try to sync events into Google Calendar///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // create the google signInClient and request user information
     private fun getSignInClient(): GoogleSignInClient {
         return GoogleSignIn.getClient(
             this,
@@ -260,11 +286,13 @@ class DashBoardActivity : AppCompatActivity() {
         )
     }
 
+    // start the signIN activity
     private fun signIn() {
         val signInIntent = getSignInClient().signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+    // get the sign in results
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -276,6 +304,7 @@ class DashBoardActivity : AppCompatActivity() {
         }
     }
 
+    //get the Google authenticated account and create Google Credential for the syncronization of events
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val result = completedTask.getResult(ApiException::class.java)
@@ -297,15 +326,5 @@ class DashBoardActivity : AppCompatActivity() {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(ContentValues.TAG, "signInResult:failed code=" + e.statusCode)
         }
-    }
-
-    override fun onBackPressed() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.dialog_exit_app))
-        builder.setMessage("Are you sure you want to close the app?")
-        builder.create()
-        builder.setPositiveButton("Accept") { _, _ -> finishAffinity() }
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog!!.dismiss() }
-        builder.show()
     }
 }

@@ -10,6 +10,7 @@ import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
 @Dao
 interface TicketDao {
 
+    // queries to get tickets
     @Query("Select * from ticket where id = :id")
     suspend fun getTicketById(id:Int):TicketEntity?
 

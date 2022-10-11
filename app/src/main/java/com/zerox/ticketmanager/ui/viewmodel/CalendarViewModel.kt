@@ -11,9 +11,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(private val repository: Repository):ViewModel(){
+    // live data to get all the tickets and notify the view
     private val _allTickets = MutableLiveData<MutableList<TicketEntity>>()
     val alltickets: LiveData<MutableList<TicketEntity>> get() = _allTickets
-
+    // live data to get the tickets of specific data and notify the view
     private val _ticketsByDate = MutableLiveData<MutableList<TicketEntity>>()
     val ticketsByDate: LiveData<MutableList<TicketEntity>> get() = _ticketsByDate
 

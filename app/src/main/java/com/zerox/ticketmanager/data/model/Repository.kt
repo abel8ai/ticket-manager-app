@@ -9,6 +9,7 @@ import com.zerox.ticketmanager.data.model.exceptions.EntityNotFoundException
 import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDateException
 import javax.inject.Inject
 
+// repository class to access models
 class Repository @Inject constructor(
     private val userDao: UserDao,
     private val ticketDao: TicketDao

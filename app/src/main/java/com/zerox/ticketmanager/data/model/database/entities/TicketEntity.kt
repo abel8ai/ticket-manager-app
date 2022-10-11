@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
+// ticket data class to save into database
 @Entity(tableName = "ticket")
 data class TicketEntity(
     @PrimaryKey(autoGenerate = true)

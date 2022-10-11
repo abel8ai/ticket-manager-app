@@ -40,7 +40,7 @@ class OverviewFragment : Fragment() {
         ticketId = requireArguments().getInt("ticket_id")
 
         // observer to receive the ticket once is tha data is available
-        workTicketViewModel.ticketModel.observe(requireActivity()) {
+        workTicketViewModel.ticket.observe(requireActivity()) {
             ticket = it
             // set values in de UI textviews
             val ticket = resources.getString(R.string.ticket_no) + it.id.toString()

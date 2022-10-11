@@ -31,8 +31,8 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // observer to receive the authenticated user
-        loginViewModel.userModel.observe(this) {user ->
+        // observer to receive the authenticated user and launch the dashboard screen
+        loginViewModel.user.observe(this) {user ->
             val intent = Intent(this,DashBoardActivity::class.java)
             intent.putExtra("user_id",user.id)
             startActivity(intent)
@@ -60,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.etPassword.setHintTextColor(resources.getColor(R.color.light_red))
                 }
             } else{
+                // start the login progress bar
                 binding.btnLoginText.visibility = View.GONE
                 binding.btnLoginPb.visibility = View.VISIBLE
                 // launching the suspend fun from Coroutine

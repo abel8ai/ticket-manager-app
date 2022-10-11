@@ -17,8 +17,8 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     // livedata to notify the activity when the data is ready
-    private val _userModel = MutableLiveData<UserEntitiy>()
-    val userModel: LiveData<UserEntitiy> get() = _userModel
+    private val _user = MutableLiveData<UserEntitiy>()
+    val user: LiveData<UserEntitiy> get() = _user
 
     suspend fun getUserByUsername(username: String) {
         repository.getUserByUsername(username)
@@ -33,7 +33,7 @@ class LoginViewModel @Inject constructor(
 
         if (user.password != encryptedPassword)
             throw IncorrectPasswordException("Incorrect password")
-        _userModel.postValue(user)
+        _user.postValue(user)
     }
 
     suspend fun addDummyUser(){
