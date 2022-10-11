@@ -6,6 +6,7 @@ import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
 import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDatabseException
 import com.zerox.ticketmanager.data.model.exceptions.EntityNotFoundException
+import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDateException
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -35,6 +36,14 @@ class Repository @Inject constructor(
     suspend fun getAllTickets():MutableList<TicketEntity>{
         return ticketDao.getAllTickets()
     }
+    suspend fun getTicketsByDate(date:String):MutableList<TicketEntity>{
+        val list =  ticketDao.getTicketsByDate(date)
+        if (list.size == 0)
+            throw NoTicketsInDateException("There are no tickets for this day")
+        else
+            return list
+    }
+
     suspend fun getLastTicketCreated():TicketEntity{
         return ticketDao.getLastTicketCreated()
             ?:throw NoTicketsInDatabseException("There are no tickets ins the database")
