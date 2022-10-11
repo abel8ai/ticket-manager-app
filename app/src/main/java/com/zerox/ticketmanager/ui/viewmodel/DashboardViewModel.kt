@@ -33,29 +33,29 @@ class DashboardViewModel @Inject constructor(private val repository: Repository)
     private val JSON_FACTORY: JsonFactory = GsonFactory.getDefaultInstance()
 
 
-    suspend fun getAllTickets() {
-        _allTickets.postValue(repository.getAllTickets())
+    suspend fun getAllTicketsByUserId(userId:Int) {
+        _allTickets.postValue(repository.getAllTicketsByUserId(userId))
     }
 
-    suspend fun addTicket(ticket: TicketEntity) {
-        repository.addTicket(ticket)
-        _allTickets.postValue(repository.getAllTickets())
+    suspend fun addTicket(ticket: TicketEntity,userId:Int) {
+        repository.addTicket(ticket,userId)
+        _allTickets.postValue(repository.getAllTicketsByUserId(userId))
     }
 
-    suspend fun getLastTicketCreated() {
-        _ticket.postValue(repository.getLastTicketCreated())
+    suspend fun getLastTicketCreatedByUserId(userId: Int) {
+        _ticket.postValue(repository.getLastTicketCreatedByUser(userId))
     }
 
     // function to create Google Calendar event
     // doesn't work for credential problems
-    suspend fun createGoogleCalendarEvent(credential: GoogleCredential) {
+    suspend fun createGoogleCalendarEvent(credential: GoogleCredential,userId: Int) {
         // Initialize Calendar service with valid OAuth credentials
         val service =
             Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName("Ticket Manager")
                 .build()
 
-        val ticketList = repository.getAllTickets()
+        val ticketList = repository.getAllTicketsByUserId(userId)
 
         for (ticket in ticketList) {
             // Create and initialize a new event

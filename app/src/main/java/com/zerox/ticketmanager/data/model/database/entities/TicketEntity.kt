@@ -11,6 +11,7 @@ import java.util.*
 data class TicketEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo val id : Int?,
+    @ColumnInfo val userId:Int,
     @ColumnInfo val motive : String,
     @ColumnInfo val clientName:String,
     @ColumnInfo val phoneNumber:String,

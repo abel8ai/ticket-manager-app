@@ -33,12 +33,18 @@ class CalendarActivity : AppCompatActivity() {
     // viewBinding
     private lateinit var binding: ActivityCalendarBinding
 
+    // logged user's id
+    // initualized in -1 to verify that the id got thru
+    private var userId =-1
+
     // list of tickets to load tickets by date
     private var ticketList = emptyList<TicketEntity>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        userId = intent.getIntExtra("user_id",-1)
+
         // observer to receive tickets data when ready
         calendarViewModel.alltickets.observe(this) {
             // load all tickets into calendar view
@@ -65,7 +71,12 @@ class CalendarActivity : AppCompatActivity() {
 
         // running coroutine to get all tickets
         CoroutineScope(Dispatchers.IO).launch {
-            calendarViewModel.getAllTickets()
+            try {
+                calendarViewModel.getAllTicketsByUserId(userId)
+            }catch (exception: Exception){ // do nothing
+
+            }
+
         }
 
         // calendar view configuration
@@ -81,7 +92,7 @@ class CalendarActivity : AppCompatActivity() {
                 // the date is marked
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        calendarViewModel.getTicketsByDate(date)
+                        calendarViewModel.getTicketsByDateAndUser(date,userId)
                     } catch (exception: Exception) {
                         runOnUiThread {
                             Toast.makeText(

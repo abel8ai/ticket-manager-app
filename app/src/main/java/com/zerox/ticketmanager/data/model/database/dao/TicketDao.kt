@@ -14,14 +14,17 @@ interface TicketDao {
     @Query("Select * from ticket where id = :id")
     suspend fun getTicketById(id:Int):TicketEntity?
 
-    @Query("Select * from ticket order by id desc limit 1")
-    suspend fun getLastTicketCreated():TicketEntity?
+    @Query("Select * from ticket where userId = :userId order by id desc limit 1")
+    suspend fun getLastTicketCreatedByUser(userId: Int):TicketEntity?
 
-    @Query("Select * from ticket where date = :date")
-    suspend fun getTicketsByDate(date:String):MutableList<TicketEntity>
+    @Query("Select * from ticket where date = :date and userId = :userId")
+    suspend fun getTicketsByDateAndUser(date:String,userId: Int):MutableList<TicketEntity>
 
     @Query("Select * from ticket")
     suspend fun getAllTickets():MutableList<TicketEntity>
+
+    @Query("Select * from ticket where userId = :userId")
+    suspend fun getAllTicketsByUserId(userId:Int):MutableList<TicketEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTicket(ticket: TicketEntity):Long

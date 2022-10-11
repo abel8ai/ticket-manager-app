@@ -1,20 +1,14 @@
 package com.zerox.ticketmanager.ui.view
 
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.createSavedStateHandle
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -32,7 +26,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.zerox.ticketmanager.BuildConfig
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
-import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDatabseException
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.utils.DatePickerFragment
@@ -44,9 +37,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
 
 
 @AndroidEntryPoint
@@ -64,11 +54,15 @@ class DashBoardActivity : AppCompatActivity() {
 
     // for animation purposes, if is rotated means that the submenu buttons are showned
     private var isRotated = false
+
+    // logged user's id
+    // initualized in -1 to verify that the id got thru
+    private var userId =-1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        userId = intent.getIntExtra("user_id",-1)
         // observer to receive tickets data when ready
         dashboardViewModel.allTickets.observe(this) {
             ticketList = it
@@ -105,7 +99,7 @@ class DashBoardActivity : AppCompatActivity() {
             // running coroutine to get last ticket created
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    dashboardViewModel.getLastTicketCreated()
+                    dashboardViewModel.getLastTicketCreatedByUserId(userId)
                 } catch (exception: Exception) {
                     runOnUiThread {
                         Toast.makeText(
@@ -135,7 +129,9 @@ class DashBoardActivity : AppCompatActivity() {
         }
         // on click listener to show tickets in calendar view
         binding.fabCalendar.setOnClickListener {
-            startActivity(Intent(this, CalendarActivity::class.java))
+            val intent = Intent(this, CalendarActivity::class.java)
+            intent.putExtra("user_id",userId)
+            startActivity(intent)
         }
 
         // load tickets information from database
@@ -226,11 +222,11 @@ class DashBoardActivity : AppCompatActivity() {
             } else {
                 // create ticket and store it in database
                 val ticket = TicketEntity(
-                    null, motive, clientName, phone, deptClass, serviceType,
+                    null,userId, motive, clientName, phone, deptClass, serviceType,
                     notes, reasonCall, address, time, date
                 )
                 CoroutineScope(Dispatchers.IO).launch {
-                    dashboardViewModel.addTicket(ticket)
+                    dashboardViewModel.addTicket(ticket,userId)
                 }
                 // close the dialog when finished
                 dialog.dismiss()
@@ -272,7 +268,11 @@ class DashBoardActivity : AppCompatActivity() {
 
     private fun loadData() {
         CoroutineScope(Dispatchers.IO).launch {
-            dashboardViewModel.getAllTickets()
+            try {
+                dashboardViewModel.getAllTicketsByUserId(userId)
+            }catch (exception:Exception){ // do nothing
+             }
+
         }
     }
 
@@ -342,7 +342,7 @@ class DashBoardActivity : AppCompatActivity() {
 
             val credential = GoogleCredential().setAccessToken(accessToken)
             CoroutineScope(Dispatchers.IO).launch {
-                dashboardViewModel.createGoogleCalendarEvent(credential)
+                dashboardViewModel.createGoogleCalendarEvent(credential,userId)
             }
 
         } catch (e: ApiException) {
