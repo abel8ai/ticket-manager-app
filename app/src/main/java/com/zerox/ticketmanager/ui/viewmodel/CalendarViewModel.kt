@@ -18,12 +18,12 @@ class CalendarViewModel @Inject constructor(private val repository: Repository):
     private val _ticketsByDate = MutableLiveData<MutableList<TicketEntity>>()
     val ticketsByDate: LiveData<MutableList<TicketEntity>> get() = _ticketsByDate
 
-    suspend fun getAllTickets() {
-        _allTickets.postValue(repository.getAllTickets())
+    suspend fun getAllTicketsByUserId(userId:Int) {
+        _allTickets.postValue(repository.getAllTicketsByUserId(userId))
     }
 
-    suspend fun getTicketsByDate(day: CalendarDay){
+    suspend fun getTicketsByDateAndUser(day: CalendarDay,userId: Int){
         val date = "${day.day}/${day.month}/${day.year}"
-        _ticketsByDate.postValue(repository.getTicketsByDate(date))
+        _ticketsByDate.postValue(repository.getTicketsByDateAndUser(date,userId))
     }
 }

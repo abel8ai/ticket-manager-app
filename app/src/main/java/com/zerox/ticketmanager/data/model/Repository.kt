@@ -4,7 +4,7 @@ import com.zerox.ticketmanager.data.model.database.dao.TicketDao
 import com.zerox.ticketmanager.data.model.database.dao.UserDao
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
-import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDatabseException
+import com.zerox.ticketmanager.data.model.exceptions.NoTicketsException
 import com.zerox.ticketmanager.data.model.exceptions.EntityNotFoundException
 import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDateException
 import javax.inject.Inject
@@ -30,24 +30,28 @@ class Repository @Inject constructor(
         return userDao.insertUser(user)
     }
 
-    suspend fun addTicket(ticket: TicketEntity):Long{
+    suspend fun addTicket(ticket: TicketEntity,userId:Int):Long{
         return ticketDao.insertTicket(ticket)
     }
 
-    suspend fun getAllTickets():MutableList<TicketEntity>{
-        return ticketDao.getAllTickets()
+    suspend fun getAllTicketsByUserId(userId: Int):MutableList<TicketEntity>{
+        val list = ticketDao.getAllTicketsByUserId(userId)
+        if (list.size == 0)
+            throw NoTicketsException("There are no tickets for this user")
+        else
+            return list
     }
-    suspend fun getTicketsByDate(date:String):MutableList<TicketEntity>{
-        val list =  ticketDao.getTicketsByDate(date)
+    suspend fun getTicketsByDateAndUser(date:String,userId: Int):MutableList<TicketEntity>{
+        val list =  ticketDao.getTicketsByDateAndUser(date,userId)
         if (list.size == 0)
             throw NoTicketsInDateException("There are no tickets for this day")
         else
             return list
     }
 
-    suspend fun getLastTicketCreated():TicketEntity{
-        return ticketDao.getLastTicketCreated()
-            ?:throw NoTicketsInDatabseException("There are no tickets in the database")
+    suspend fun getLastTicketCreatedByUser(userId: Int):TicketEntity{
+        return ticketDao.getLastTicketCreatedByUser(userId)
+            ?:throw NoTicketsException("There are no tickets created")
     }
 
     suspend fun getTicketById(id: Int): TicketEntity {
