@@ -22,7 +22,7 @@ class CalendarViewModel @Inject constructor(private val repository: Repository):
     }
 
     suspend fun getTicketsByDate(day: CalendarDay){
-        val date = "${day.year}/${day.month}/${day.day}"
+        val date = "${day.day}/${day.month}/${day.year}"
         _ticketsByDate.postValue(repository.getTicketsByDate(date))
     }
 }
