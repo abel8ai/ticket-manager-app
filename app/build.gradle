@@ -39,6 +39,8 @@ android {
         all { // You should exclude one of them not both of them
             exclude group: "com.android.support", module: "support-compat"
             exclude group: "com.android.support", module: "support-v4"
+            exclude module: 'httpclient'
+            exclude module: 'commons-logging'
         }
     }
     buildFeatures {

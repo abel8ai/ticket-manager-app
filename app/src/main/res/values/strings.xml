@@ -45,5 +45,11 @@
     <string name="calendar">Calendar</string>
     <string name="menu">Menu</string>
 
+    <string name="close_app_confirmation">Are you sure you want to close the app?</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+
+
+
 
 </resources>

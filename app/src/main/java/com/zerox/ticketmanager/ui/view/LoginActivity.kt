@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.databinding.ActivityLoginBinding
@@ -88,6 +89,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     override fun onBackPressed() {
-
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.dialog_exit_app))
+        builder.setMessage(resources.getString(R.string.close_app_confirmation))
+        builder.create()
+        builder.setPositiveButton(resources.getString(R.string.accept)) { _, _ -> finishAffinity() }
+        builder.setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog!!.dismiss() }
+        builder.show()
     }
 }

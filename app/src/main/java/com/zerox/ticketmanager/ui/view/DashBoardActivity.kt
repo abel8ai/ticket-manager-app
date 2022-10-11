@@ -275,10 +275,10 @@ class DashBoardActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(resources.getString(R.string.dialog_exit_app))
-        builder.setMessage("Are you sure you want to close the app?")
+        builder.setMessage(resources.getString(R.string.close_app_confirmation))
         builder.create()
-        builder.setPositiveButton("Accept") { _, _ -> finishAffinity() }
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog!!.dismiss() }
+        builder.setPositiveButton(resources.getString(R.string.accept)) { _, _ -> finishAffinity() }
+        builder.setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ -> dialog!!.dismiss() }
         builder.show()
     }
 
