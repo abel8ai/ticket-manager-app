@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">Ticket Manager</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="mandatory_field">Required field</string>
+    <string name="view_ticket">view ticket</string>
+    <string name="client_preview">Robert Perez</string>
+    <string name="button_add">Add</string>
+    <string name="button_calendar">Calendar</string>
+    <string name="button_directions">Directions</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="client_name">Client Name</string>
+    <string name="address">Address</string>
+    <string name="date">Date</string>
+    <string name="dialog_add_ticket_title">Add Ticket</string>
+    <string name="dialog_exit_app">Exit App</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="directions_title">Directions</string>
+    <string name="work_ticket_title">Work Ticket</string>
+    <string name="phone_number">Phone Number</string>
+
+
+    <string name="overview">Overview</string>
+    <string name="finishing_up">Finishing Up</string>
+    <string name="purchasing">Purchasing</string>
+    <string name="pic_logo">Picture Logo</string>
+    <string name="work_details">Work Details</string>
+    <string name="ticket_no">Ticket #</string>
+    <string name="enter_destination">Enter destination</string>
+    <string name="dashboard_caps">DASHBOARD</string>
+    <string name="customer_info">Customer Info:</string>
+    <string name="customer_preview">-----------</string>
+    <string name="phone_preview">-------------------</string>
+    <string name="job_site_address">Job Site Address:</string>
+    <string name="dispatch_notes">Dispatch Notes:</string>
+    <string name="dept_class">Dept. Class:</string>
+    <string name="service_type">Service Type:</string>
+    <string name="get_directions">Get Directions</string>
+    <string name="scheduled_for">Scheduled for:</string>
+    <string name="fecha_preview">--/--/----</string>
+    <string name="time_preview">--:-- --</string>
+    <string name="new_ticket">New Ticket</string>
+    <string name="sync">Sync</string>
+    <string name="calendar">Calendar</string>
+    <string name="menu">Menu</string>
+
+    <string name="close_app_confirmation">Are you sure you want to close the app?</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+
+
+
+
 </resources>

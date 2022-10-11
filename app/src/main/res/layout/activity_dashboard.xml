@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/back"
+    tools:context=".ui.view.DashBoardActivity">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_left_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/fab_calendar"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_calendar_24" />
+            <TextView
+                android:text="@string/calendar"
+                android:textColor="@color/primary"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/fab_sync_calendar"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_sync_24" />
+            <TextView
+                android:text="@string/sync"
+                android:textColor="@color/primary"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:background="@drawable/acme_logo" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@color/grey_60" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:text="@string/dashboard_caps" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_rigth_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/fab_add_ticket"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_add_24" />
+            <TextView
+                android:text="@string/new_ticket"
+                android:layout_gravity="center"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fab_menu"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/fab_menu_icon"
+                android:layout_width="40dp"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_menu_24" />
+            <TextView
+                android:text="@string/menu"
+                android:textColor="@color/primary"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_work_ticket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/primary"
+        android:contentDescription="@string/button_add"
+        android:elevation="2dp"
+        android:src="@drawable/ic_sticky_note_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_rigth_buttons"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_get_directions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/primary"
+        android:contentDescription="@string/button_add"
+        android:src="@drawable/ic_directions_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fab_work_ticket"
+        app:tint="@color/white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tickets"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_left_buttons"
+        tools:listitem="@layout/item_ticket" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
