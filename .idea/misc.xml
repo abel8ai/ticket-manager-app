@@ -8,6 +8,9 @@
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/btn_outline.xml" value="0.1975" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_add_24.xml" value="0.1975" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_calendar_24.xml" value="0.1975" />
+        <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_close_24.xml" value="0.218" />
+        <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_dashboard_24.xml" value="0.218" />
+        <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_directions_24_green.xml" value="0.218" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_location_on_24.xml" value="0.1975" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_menu_24.xml" value="0.1975" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_note_24.xml" value="0.1975" />
@@ -16,7 +19,7 @@
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/drawable/ic_sync_24.xml" value="0.1975" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_calendar.xml" value="0.23802083333333332" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_dash_board.xml" value="0.20697463768115942" />
-        <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_dashboard.xml" value="0.3484251968503937" />
+        <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_dashboard.xml" value="0.26221498371335505" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_directions.xml" value="0.23802083333333332" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_login.xml" value="0.20697463768115942" />
         <entry key="..\:/Users/Abel/AndroidStudioProjects/TicketManager/app/src/main/res/layout/activity_main.xml" value="0.23802083333333332" />

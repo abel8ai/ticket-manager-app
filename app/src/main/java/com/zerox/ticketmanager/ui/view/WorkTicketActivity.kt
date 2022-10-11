@@ -3,6 +3,7 @@ package com.zerox.ticketmanager.ui.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -32,9 +33,11 @@ class WorkTicketActivity : AppCompatActivity() {
         binding = ActivityWorkTicketBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // configure the support action bar's title and back button
-        supportActionBar!!.title = resources.getString(R.string.work_ticket_title)
+        // set title and back function for the support action bar
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_ios_24);
+        supportActionBar!!.title = Html.fromHtml("<font color='#3DCB01'>Work Ticket</font>")
+
         ticketId = intent.extras!!.getInt("ticket_id")
         initTab()
 

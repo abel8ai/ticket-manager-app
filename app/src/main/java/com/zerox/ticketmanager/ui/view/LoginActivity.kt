@@ -38,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        // create login user:peter password:123
         CoroutineScope(Dispatchers.IO).launch {
             loginViewModel.addDummyUser()
         }

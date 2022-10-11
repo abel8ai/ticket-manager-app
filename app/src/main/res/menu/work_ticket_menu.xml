@@ -10,5 +10,5 @@
         android:id="@+id/go_to_directions"
         android:title="@string/button_directions"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_directions_24" />
+        android:icon="@drawable/ic_directions_24_green" />
 </menu>

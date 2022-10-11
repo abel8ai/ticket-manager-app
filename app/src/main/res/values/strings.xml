@@ -43,6 +43,7 @@
     <string name="new_ticket">New Ticket</string>
     <string name="sync">Sync</string>
     <string name="calendar">Calendar</string>
+    <string name="menu">Menu</string>
 
 
 </resources>

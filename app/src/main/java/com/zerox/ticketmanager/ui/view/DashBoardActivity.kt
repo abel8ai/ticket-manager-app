@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.zerox.ticketmanager.BuildConfig
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
+import com.zerox.ticketmanager.data.model.exceptions.NoTicketsInDatabseException
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.utils.DatePickerFragment
@@ -102,8 +104,16 @@ class DashBoardActivity : AppCompatActivity() {
         binding.fabWorkTicket.setOnClickListener {
             // running coroutine to get last ticket created
             CoroutineScope(Dispatchers.IO).launch {
-                dashboardViewModel.getLastTicketCreated()
+                try {
+                    dashboardViewModel.getLastTicketCreated()
+                } catch (exception: Exception) {
+                    runOnUiThread {
+                        Toast.makeText(this@DashBoardActivity, exception.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
+
+
         }
         // on click listener for get directions menu element
         binding.fabGetDirections.setOnClickListener {
@@ -117,6 +127,7 @@ class DashBoardActivity : AppCompatActivity() {
         // nor working due to inability to get a proper credential from Google SignIn
         binding.fabSyncCalendar.setOnClickListener {
             //signIn()
+            Toast.makeText(this, "Function not yet implemented", Toast.LENGTH_SHORT).show()
         }
         // on click listener to show tickets in calendar view
         binding.fabCalendar.setOnClickListener {
@@ -165,7 +176,8 @@ class DashBoardActivity : AppCompatActivity() {
             // fields validation
             if (clientName.isEmpty() || address.isEmpty() || date.isEmpty() || phone.isEmpty()
                 || motive.isEmpty() || deptClass.isEmpty() || notes.isEmpty() || reasonCall.isEmpty()
-                || serviceType.isEmpty() || time.isEmpty()) {
+                || serviceType.isEmpty() || time.isEmpty()
+            ) {
                 val hint = resources.getString(R.string.mandatory_field)
                 if (dialogBinding.etClientName.text.isEmpty()) {
                     dialogBinding.etClientName.hint = hint
@@ -227,14 +239,15 @@ class DashBoardActivity : AppCompatActivity() {
         val newFragment: TimePickerFragment =
             TimePickerFragment.newInstance { timepicker, hour, minutes ->
                 var selectedTime = ""
-                if(hour < 12)
+                if (hour < 12)
                     selectedTime = "$hour:$minutes am"
                 else
-                    selectedTime = "${hour-12}:$minutes pm"
+                    selectedTime = "${hour - 12}:$minutes pm"
                 etTime.text = selectedTime
             }
         newFragment.show(supportFragmentManager, "datePicker")
     }
+
     // dialog to load DatePicker Fragment and select date when clicking on the time edittext
     private fun showDatePicker(etDate: TextView) {
         val newFragment: DatePickerFragment =

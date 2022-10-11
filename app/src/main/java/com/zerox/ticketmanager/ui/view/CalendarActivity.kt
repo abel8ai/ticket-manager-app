@@ -1,12 +1,19 @@
 package com.zerox.ticketmanager.ui.view
 
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Html
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityCalendarBinding
 import com.zerox.ticketmanager.ui.view.adapters.TicketAdapter
@@ -22,6 +29,7 @@ class CalendarActivity : AppCompatActivity() {
 
     // viewmodel injection
     private val calendarViewModel: CalendarViewModel by viewModels()
+
     // viewBinding
     private lateinit var binding: ActivityCalendarBinding
 
@@ -43,7 +51,9 @@ class CalendarActivity : AppCompatActivity() {
             }
 
         }
-        // support action bar on back press
+        // support action bar configuration
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_ios_24);
+        supportActionBar!!.title = Html.fromHtml("<font color='#3DCB01'>Calendar</font>")
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // observer to receive tickets data from a specific data
@@ -64,17 +74,25 @@ class CalendarActivity : AppCompatActivity() {
         binding.calendarView.setOnDateChangedListener { widget, date, selected ->
             if (!selected) {
                 widget.setDateSelected(date, true)
-                try {
-                    // running coroutine to get tickets from specific date
-                    // throw NotTicketsInDateException if there are no tickets
-                    // it should no throw the exception given that there always gonna be an event if
-                    // the date is marked
-                    CoroutineScope(Dispatchers.IO).launch {
+
+                // running coroutine to get tickets from specific date
+                // throw NotTicketsInDateException if there are no tickets
+                // it should no throw the exception given that there always gonna be an event if
+                // the date is marked
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
                         calendarViewModel.getTicketsByDate(date)
+                    } catch (exception: Exception) {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@CalendarActivity,
+                                exception.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                } catch (exception: Exception) {
-                    Toast.makeText(this@CalendarActivity, exception.message, Toast.LENGTH_SHORT).show()
                 }
+
             } else {
                 // clear the recycler view when clicking an unmarked date
                 widget.setDateSelected(date, false)

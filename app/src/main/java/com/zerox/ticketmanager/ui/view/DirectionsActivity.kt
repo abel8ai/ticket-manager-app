@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.widget.SearchView
 import android.widget.Toast
@@ -62,8 +63,9 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         // set title and back function for the support action bar
-        supportActionBar!!.title = resources.getString(R.string.directions_title)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back_ios_24);
+        supportActionBar!!.title = Html.fromHtml("<font color='#3DCB01'>Directions</font>")
 
         // retrieve direction if it comes from work ticket screen
         destination = intent.extras?.getString("direction")

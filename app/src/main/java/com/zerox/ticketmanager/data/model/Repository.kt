@@ -47,7 +47,7 @@ class Repository @Inject constructor(
 
     suspend fun getLastTicketCreated():TicketEntity{
         return ticketDao.getLastTicketCreated()
-            ?:throw NoTicketsInDatabseException("There are no tickets ins the database")
+            ?:throw NoTicketsInDatabseException("There are no tickets in the database")
     }
 
     suspend fun getTicketById(id: Int): TicketEntity {
