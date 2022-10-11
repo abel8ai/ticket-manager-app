@@ -6,18 +6,23 @@ import androidx.lifecycle.ViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.zerox.ticketmanager.data.model.Repository
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class CalendarViewModel @Inject constructor(private val repository: Repository):ViewModel(){
-    private val _ticketsModel = MutableLiveData<MutableList<TicketEntity>>()
-    val ticketsModel: LiveData<MutableList<TicketEntity>> get() = _ticketsModel
+    private val _allTickets = MutableLiveData<MutableList<TicketEntity>>()
+    val alltickets: LiveData<MutableList<TicketEntity>> get() = _allTickets
+
+    private val _ticketsByDate = MutableLiveData<MutableList<TicketEntity>>()
+    val ticketsByDate: LiveData<MutableList<TicketEntity>> get() = _ticketsByDate
 
     suspend fun getAllTickets() {
-        _ticketsModel.postValue(repository.getAllTickets())
+        _allTickets.postValue(repository.getAllTickets())
     }
 
     suspend fun getTicketsByDate(day: CalendarDay){
         val date = "${day.year}/${day.month}/${day.day}"
-        _ticketsModel.postValue(repository.getTicketsByDate(date))
+        _ticketsByDate.postValue(repository.getTicketsByDate(date))
     }
 }
