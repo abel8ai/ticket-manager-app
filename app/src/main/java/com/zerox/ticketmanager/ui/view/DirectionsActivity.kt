@@ -94,7 +94,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
                             runOnUiThread {
                                 Toast.makeText(
                                     this@DirectionsActivity,
-                                    "Unable to find destination",
+                                    resources.getString(R.string.location_not_found),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -211,7 +211,7 @@ class DirectionsActivity : AppCompatActivity(), OnMapReadyCallback {
                                         runOnUiThread {
                                             Toast.makeText(
                                                 this@DirectionsActivity,
-                                                exception.message,
+                                                resources.getString(R.string.location_not_found),
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
