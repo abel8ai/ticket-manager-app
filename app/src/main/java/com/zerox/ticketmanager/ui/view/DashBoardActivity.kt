@@ -290,7 +290,7 @@ class DashBoardActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val adapter = TicketAdapter(ticketList)
+        val adapter = TicketAdapter(ticketList,dashboardViewModel,userId,this)
         binding.rvTickets.layoutManager = LinearLayoutManager(this)
         binding.rvTickets.adapter = adapter
     }

@@ -1,9 +1,6 @@
 package com.zerox.ticketmanager.data.model.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.data.model.database.entities.UserEntitiy
 
@@ -28,4 +25,10 @@ interface TicketDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTicket(ticket: TicketEntity):Long
+
+    @Delete
+    suspend fun deleteTicket(ticket: TicketEntity)
+
+    @Update
+    suspend fun updateTicket(ticket: TicketEntity)
 }

@@ -42,6 +42,16 @@ class DashboardViewModel @Inject constructor(private val repository: Repository)
         _allTickets.postValue(repository.getAllTicketsByUserId(userId))
     }
 
+    suspend fun updateTicket(ticket: TicketEntity,userId:Int) {
+        repository.updateTicket(ticket)
+        _allTickets.postValue(repository.getAllTicketsByUserId(userId))
+    }
+
+    suspend fun deleteTicket(ticket: TicketEntity,userId:Int) {
+        repository.deleteTicket(ticket)
+        _allTickets.postValue(repository.getAllTicketsByUserId(userId))
+    }
+
     suspend fun getLastTicketCreatedByUserId(userId: Int) {
         _ticket.postValue(repository.getLastTicketCreatedByUser(userId))
     }
