@@ -1,6 +1,7 @@
 package com.zerox.ticketmanager.ui.view.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zerox.ticketmanager.R
@@ -18,4 +19,6 @@ class TicketAdapter(private val tickets: List<TicketEntity>):RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int = tickets.size
+
+
 }

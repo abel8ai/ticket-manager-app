@@ -9,26 +9,22 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.GoogleAuthUtil
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-
 import com.google.android.gms.common.api.ApiException
-
 import com.google.android.gms.tasks.Task
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-
 import com.zerox.ticketmanager.BuildConfig
 import com.zerox.ticketmanager.R
 import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.utils.DatePickerFragment
+import com.zerox.ticketmanager.ui.utils.ItemClickSupport
 import com.zerox.ticketmanager.ui.utils.TimePickerFragment
 import com.zerox.ticketmanager.ui.utils.ViewAnimation
 import com.zerox.ticketmanager.ui.view.adapters.TicketAdapter
@@ -57,12 +53,12 @@ class DashBoardActivity : AppCompatActivity() {
 
     // logged user's id
     // initualized in -1 to verify that the id got thru
-    private var userId =-1
+    private var userId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        userId = intent.getIntExtra("user_id",-1)
+        userId = intent.getIntExtra("user_id", -1)
         // observer to receive tickets data when ready
         dashboardViewModel.allTickets.observe(this) {
             ticketList = it
@@ -70,10 +66,11 @@ class DashBoardActivity : AppCompatActivity() {
             initRecyclerView()
         }
 
-        //observer to get last ticket created and launch Work ticket screen with that ticket's id
+        //observer to get last ticket created and launch Work ticket screen with that ticket's id and user id
         dashboardViewModel.ticket.observe(this) {
             val intent = Intent(this@DashBoardActivity, WorkTicketActivity::class.java)
             intent.putExtra("ticket_id", it.id)
+            intent.putExtra("user_id", userId)
             startActivity(intent)
         }
 
@@ -119,7 +116,8 @@ class DashBoardActivity : AppCompatActivity() {
         }
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
-            showAddTicketDialog()
+            // the ticket parameter to reuse for modification
+            showTicketDialog(null)
         }
         // on click listener to sync tickets into calendar
         // nor working due to inability to get a proper credential from Google SignIn
@@ -130,7 +128,7 @@ class DashBoardActivity : AppCompatActivity() {
         // on click listener to show tickets in calendar view
         binding.fabCalendar.setOnClickListener {
             val intent = Intent(this, CalendarActivity::class.java)
-            intent.putExtra("user_id",userId)
+            intent.putExtra("user_id", userId)
             startActivity(intent)
         }
 
@@ -138,10 +136,14 @@ class DashBoardActivity : AppCompatActivity() {
         loadData()
     }
 
-    private fun showAddTicketDialog() {
+    private fun showTicketDialog(ticket: TicketEntity?) {
         // viewBinding for the add ticket dialog
         val dialogBinding: DialogAddTicketBinding = DialogAddTicketBinding.inflate(layoutInflater)
 
+        if (ticket != null) {
+            // fill al fields with ticket data
+            //dialogBinding.
+        }
         // shows DatePickerFragment to select date
         dialogBinding.etDate.setOnClickListener {
             showDatePicker(dialogBinding.etDate)
@@ -151,7 +153,10 @@ class DashBoardActivity : AppCompatActivity() {
         }
         // building the Alert Dialog
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
+        if (ticket != null)
+            builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
+        else
+            builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
         builder.setView(dialogBinding.root)
         builder.setCancelable(false)
         builder.create()
@@ -220,16 +225,25 @@ class DashBoardActivity : AppCompatActivity() {
                     dialogBinding.etReasonCall.setHintTextColor(resources.getColor(R.color.light_red))
                 }
             } else {
-                // create ticket and store it in database
-                val ticket = TicketEntity(
-                    null,userId, motive, clientName, phone, deptClass, serviceType,
-                    notes, reasonCall, address, time, date
-                )
-                CoroutineScope(Dispatchers.IO).launch {
-                    dashboardViewModel.addTicket(ticket,userId)
+                if (ticket !=null){
+                    var modTicket = TicketEntity(ticket.id,ticket.userId,ticket.motive,ticket.clientName,
+                    ticket.phoneNumber,ticket.deptClass,ticket.serviceType,ticket.notes,ticket.reasonCall,
+                    ticket.address,ticket.time,ticket.date)
+
+
                 }
-                // close the dialog when finished
-                dialog.dismiss()
+                else{
+                    // create ticket and store it in database
+                    val ticket = TicketEntity(
+                        null, userId, motive, clientName, phone, deptClass, serviceType,
+                        notes, reasonCall, address, time, date
+                    )
+                    CoroutineScope(Dispatchers.IO).launch {
+                        dashboardViewModel.addTicket(ticket, userId)
+                    }
+                    // close the dialog when finished
+                    dialog.dismiss()
+                }
             }
         }
     }
@@ -241,7 +255,6 @@ class DashBoardActivity : AppCompatActivity() {
                 var finalMinutes = ""
                 if (minutes < 10)
                     finalMinutes = "0$minutes"
-
                 else
                     finalMinutes = minutes.toString()
 
@@ -270,8 +283,8 @@ class DashBoardActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 dashboardViewModel.getAllTicketsByUserId(userId)
-            }catch (exception:Exception){ // do nothing
-             }
+            } catch (exception: Exception) { // do nothing
+            }
 
         }
     }
@@ -342,7 +355,7 @@ class DashBoardActivity : AppCompatActivity() {
 
             val credential = GoogleCredential().setAccessToken(accessToken)
             CoroutineScope(Dispatchers.IO).launch {
-                dashboardViewModel.createGoogleCalendarEvent(credential,userId)
+                dashboardViewModel.createGoogleCalendarEvent(credential, userId)
             }
 
         } catch (e: ApiException) {
