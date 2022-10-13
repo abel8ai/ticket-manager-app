@@ -24,7 +24,6 @@ import com.zerox.ticketmanager.data.model.database.entities.TicketEntity
 import com.zerox.ticketmanager.databinding.ActivityDashboardBinding
 import com.zerox.ticketmanager.databinding.DialogAddTicketBinding
 import com.zerox.ticketmanager.ui.utils.DatePickerFragment
-import com.zerox.ticketmanager.ui.utils.ItemClickSupport
 import com.zerox.ticketmanager.ui.utils.TimePickerFragment
 import com.zerox.ticketmanager.ui.utils.ViewAnimation
 import com.zerox.ticketmanager.ui.view.adapters.TicketAdapter
@@ -117,7 +116,7 @@ class DashBoardActivity : AppCompatActivity() {
         // on click listener for add ticket button
         binding.fabAddTicket.setOnClickListener {
             // the ticket parameter to reuse for modification
-            showTicketDialog(null)
+            showAddTicketDialog()
         }
         // on click listener to sync tickets into calendar
         // nor working due to inability to get a proper credential from Google SignIn
@@ -136,14 +135,10 @@ class DashBoardActivity : AppCompatActivity() {
         loadData()
     }
 
-    private fun showTicketDialog(ticket: TicketEntity?) {
+    private fun showAddTicketDialog() {
         // viewBinding for the add ticket dialog
         val dialogBinding: DialogAddTicketBinding = DialogAddTicketBinding.inflate(layoutInflater)
 
-        if (ticket != null) {
-            // fill al fields with ticket data
-            //dialogBinding.
-        }
         // shows DatePickerFragment to select date
         dialogBinding.etDate.setOnClickListener {
             showDatePicker(dialogBinding.etDate)
@@ -153,18 +148,16 @@ class DashBoardActivity : AppCompatActivity() {
         }
         // building the Alert Dialog
         val builder = AlertDialog.Builder(this)
-        if (ticket != null)
-            builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
-        else
-            builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
+
+        builder.setTitle(resources.getString(R.string.dialog_add_ticket_title))
         builder.setView(dialogBinding.root)
         builder.setCancelable(false)
         builder.create()
         val dialog = builder.show()
-        dialogBinding.btCancelar.setOnClickListener {
+        dialogBinding.btnCancelar.setOnClickListener {
             dialog.dismiss()
         }
-        dialogBinding.btAdicionar.setOnClickListener {
+        dialogBinding.btnAdicionar.setOnClickListener {
 
             // getting the values from the dialog's viewBinding
             val clientName = dialogBinding.etClientName.text.toString()
@@ -225,25 +218,17 @@ class DashBoardActivity : AppCompatActivity() {
                     dialogBinding.etReasonCall.setHintTextColor(resources.getColor(R.color.light_red))
                 }
             } else {
-                if (ticket !=null){
-                    var modTicket = TicketEntity(ticket.id,ticket.userId,ticket.motive,ticket.clientName,
-                    ticket.phoneNumber,ticket.deptClass,ticket.serviceType,ticket.notes,ticket.reasonCall,
-                    ticket.address,ticket.time,ticket.date)
 
-
+                // create ticket and store it in database
+                val ticket = TicketEntity(
+                    null, userId, motive, clientName, phone, deptClass, serviceType,
+                    notes, reasonCall, address, time, date
+                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    dashboardViewModel.addTicket(ticket, userId)
                 }
-                else{
-                    // create ticket and store it in database
-                    val ticket = TicketEntity(
-                        null, userId, motive, clientName, phone, deptClass, serviceType,
-                        notes, reasonCall, address, time, date
-                    )
-                    CoroutineScope(Dispatchers.IO).launch {
-                        dashboardViewModel.addTicket(ticket, userId)
-                    }
-                    // close the dialog when finished
-                    dialog.dismiss()
-                }
+                // close the dialog when finished
+                dialog.dismiss()
             }
         }
     }
@@ -290,7 +275,7 @@ class DashBoardActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val adapter = TicketAdapter(ticketList,dashboardViewModel,userId,this)
+        val adapter = TicketAdapter(ticketList, dashboardViewModel, userId, this)
         binding.rvTickets.layoutManager = LinearLayoutManager(this)
         binding.rvTickets.adapter = adapter
     }

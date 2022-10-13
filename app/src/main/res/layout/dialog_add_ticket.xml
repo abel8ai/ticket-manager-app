@@ -219,7 +219,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/bt_Cancelar"
+                    android:id="@+id/btn_Cancelar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#00FFFFFF"
@@ -227,12 +227,12 @@
                     android:textAllCaps="true"
                     android:textColor="@color/primary"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/bt_adicionar"
+                    app:layout_constraintEnd_toStartOf="@id/btn_adicionar"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/bt_adicionar"
+                    android:id="@+id/btn_adicionar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#00FFFFFF"
