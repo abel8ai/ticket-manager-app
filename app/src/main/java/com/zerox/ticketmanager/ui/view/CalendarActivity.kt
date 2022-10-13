@@ -1,16 +1,11 @@
 package com.zerox.ticketmanager.ui.view
 
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Html
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.zerox.ticketmanager.R
@@ -107,7 +102,7 @@ class CalendarActivity : AppCompatActivity() {
             } else {
                 // clear the recycler view when clicking an unmarked date
                 widget.setDateSelected(date, false)
-                val adapter = TicketAdapter(emptyList())
+                val adapter = TicketReducedAdapter(emptyList())
                 binding.rvTickets.adapter = adapter
             }
         }

@@ -58,4 +58,11 @@ class Repository @Inject constructor(
         return ticketDao.getTicketById(id)
             ?: throw EntityNotFoundException("There is no ticket with the provided id")
     }
+
+    suspend fun updateTicket(ticket: TicketEntity){
+        ticketDao.updateTicket(ticket)
+    }
+    suspend fun deleteTicket(ticket: TicketEntity){
+        ticketDao.deleteTicket(ticket)
+    }
 }

@@ -23,6 +23,7 @@ class TicketReducedViewHolder(view:View):RecyclerView.ViewHolder(view){
         binding.btnViewTicket.setOnClickListener {
             val intent = Intent(binding.root.context,WorkTicketActivity::class.java)
             intent.putExtra("ticket_id",ticket.id)
+            intent.putExtra("user_id",ticket.userId)
             binding.root.context.startActivity(intent)
         }
     }

@@ -10,7 +10,7 @@ import com.zerox.ticketmanager.ui.view.WorkTicketActivity
 
 class TicketViewHolder(view:View):RecyclerView.ViewHolder(view){
 
-    private val binding = ItemTicketBinding.bind(view)
+    val binding = ItemTicketBinding.bind(view)
     fun bind(ticket: TicketEntity){
         val ticketLabel = binding.root.context.resources.getString(R.string.ticket_no)
         val ticketNo = ticket.id
@@ -23,6 +23,7 @@ class TicketViewHolder(view:View):RecyclerView.ViewHolder(view){
         binding.btnViewTicket.setOnClickListener {
             val intent = Intent(binding.root.context,WorkTicketActivity::class.java)
             intent.putExtra("ticket_id",ticket.id)
+            intent.putExtra("user_id",ticket.userId)
             binding.root.context.startActivity(intent)
         }
     }

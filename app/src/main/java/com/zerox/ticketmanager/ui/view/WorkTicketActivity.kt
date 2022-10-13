@@ -28,6 +28,7 @@ class WorkTicketActivity : AppCompatActivity() {
     private lateinit var ticket: TicketEntity
     // variable to get ticket id from extras
     private var ticketId = -1;
+    private var userId = -1;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkTicketBinding.inflate(layoutInflater)
@@ -39,6 +40,7 @@ class WorkTicketActivity : AppCompatActivity() {
         supportActionBar!!.title = Html.fromHtml("<font color='#3DCB01'>Work Ticket</font>")
 
         ticketId = intent.extras!!.getInt("ticket_id")
+        userId = intent.extras!!.getInt("user_id")
         initTab()
 
         // observer to receive the ticket once is tha data is available
@@ -95,7 +97,9 @@ class WorkTicketActivity : AppCompatActivity() {
     }
     // back button in action bar
     override fun onSupportNavigateUp(): Boolean {
-        startActivity(Intent(this,DashBoardActivity::class.java))
+        val intent = Intent(this,DashBoardActivity::class.java)
+        intent.putExtra("user_id",userId)
+        startActivity(intent)
         return super.onSupportNavigateUp()
     }
 
